@@ -78,6 +78,19 @@
 
 <script>
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+  created() {
+    this.api();
+  },
+  methods: {
+    async api() {
+      try {
+        const rs = await this.$axios.post('/api/test');
+        // console.log(rs);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
 }
 </script>
