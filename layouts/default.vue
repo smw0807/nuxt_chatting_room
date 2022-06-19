@@ -7,6 +7,12 @@
       >
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <template v-if="userInfo">
+        <profile />
+      </template>
+      <template v-else>
+        <login />
+      </template>
     </v-app-bar>
 
     <v-main>
@@ -19,12 +25,25 @@
 </template>
 
 <script>
+import login from '@/components/app-bar-right/login';
+import profile from '@/components/app-bar-right/profile';
 export default {
   name: 'DefaultLayout',
+  components: {
+    login, profile
+  },
   data () {
     return {
       title: 'Nuxt 채팅 웹 사이트'
     }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.getters['user/info'];
+    }
+  },
+  mounted() {
+    console.log('user info : ', this.userInfo);
   }
 }
 </script>
