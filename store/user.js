@@ -4,15 +4,15 @@
 
 export const state = () => {
   return {
-    // info: null,
-    info: {
-      email: 'test@naver.com',
-      name: 'minwoo',
-      nickName: 'smw001',
-      gender: 'male',
-      // image: null
-      image:'v.png'
-    },
+    info: null,
+    // info: {
+    //   email: 'test@naver.com',
+    //   name: 'minwoo',
+    //   nickName: 'smw001',
+    //   gender: 'male',
+    //   // image: null
+    //   image:'v.png'
+    // },
   }
 }
 
@@ -30,6 +30,11 @@ export const getters = {
 
 export const actions = {
   login({ commit }, params) { //로그인
+    return new Promise( async (resolve, reject) => {
+
+    })
+  },
+  signup({ commit }, params) { //회원가입
     return new Promise( async (resolve, reject) => {
 
     })
