@@ -14,9 +14,10 @@ const chatSchema = new Schema({
     ref: 'room'
   },
   //채팅 메시지 입력한 사용자
-  user: {
+  nickName: {
     type: String,
     required: true,
+    ref: 'users'
   },
   //채팅 내용
   chat: String,
