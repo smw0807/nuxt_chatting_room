@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      title: 'Nuxt 채팅 웹 사이트'
+      title: 'Nuxt Chat'
     }
   },
   computed: {
