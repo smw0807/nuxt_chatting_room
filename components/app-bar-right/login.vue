@@ -3,26 +3,27 @@
     <v-dialog
       v-model="dialog"
       persistent
-      max-width="500px"
+      max-width="450px"
       >
       <template v-slot:activator="{on, attrs}">
         <v-btn
-          color="primary"
+          color="success"
           dark
           v-bind="attrs"
           v-on="on"
+          outlined
           >
           로그인
         </v-btn>
       </template>
       <v-card class="elevation-12">
         <v-toolbar
-          color="primary"
+          color="info"
           dark
           flat
           dense
         >
-          <v-toolbar-title>채팅방에 참여하기 위해선 로그인이 필요합니다.</v-toolbar-title>
+          <v-toolbar-title class="text-subtitle-1">채팅방에 참여하기 위해선 로그인이 필요합니다.</v-toolbar-title>
           <v-spacer/>
           <v-toolbar-items @click="dialog = !dialog">
             <v-icon>
@@ -58,7 +59,8 @@
         </v-card-text>
         <v-card-actions>
           <!-- todo 회원가입 컴포넌트 넣기 -->
-          <v-btn color="secondary">회원가입</v-btn>
+          <signUp />
+          <!-- <v-btn color="primary" class="white--text" outlined>회원가입</v-btn> -->
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="submit">로그인</v-btn>
         </v-card-actions>
@@ -68,7 +70,11 @@
 </template>
 
 <script>
+import signUp from './sign-up';
 export default {
+  components: {
+    signUp,
+  },
   data() {
     return {
       dialog: false,
