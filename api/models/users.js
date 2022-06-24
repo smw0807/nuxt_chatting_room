@@ -24,8 +24,6 @@ const users = new Schema({
     type: String,
     required: true,
   },
-  age: Number,
-  gender: String,
   image: String,
   desc: String
 })
