@@ -33,4 +33,4 @@ const roomSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('room', roomSchema);
+module.exports = mongoose.models.room || mongoose.model('room', roomSchema);

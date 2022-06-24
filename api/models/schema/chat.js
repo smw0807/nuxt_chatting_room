@@ -5,6 +5,7 @@
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
+const { Types: { ObjectId } } = Schema;
 
 const chatSchema = new Schema({
   //방 아이디
@@ -30,4 +31,4 @@ const chatSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('chat', chatSchema);
+module.exports = mongoose.models.chat || mongoose.model('chat', chatSchema);

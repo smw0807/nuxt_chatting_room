@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const users = new Schema({
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -28,4 +28,4 @@ const users = new Schema({
   desc: String
 })
 
-module.exports = mongoose.model('users', users);
+module.exports = mongoose.models.users || mongoose.model('users', userSchema);
