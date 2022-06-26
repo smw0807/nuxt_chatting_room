@@ -60,7 +60,6 @@
         <v-card-actions>
           <!-- todo 회원가입 컴포넌트 넣기 -->
           <signUp />
-          <!-- <v-btn color="primary" class="white--text" outlined>회원가입</v-btn> -->
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="submit">로그인</v-btn>
         </v-card-actions>

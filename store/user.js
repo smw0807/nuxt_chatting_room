@@ -36,7 +36,14 @@ export const actions = {
   },
   signup({ commit }, params) { //회원가입
     return new Promise( async (resolve, reject) => {
-
+      try {
+        console.log(params);
+        const rs = await this.$axios.post('/api/user/sign-up', params);
+        console.log(rs);
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
     })
   },
   verifyToken({ commit }, params) { //토큰 검증
