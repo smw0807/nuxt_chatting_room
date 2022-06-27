@@ -3,6 +3,7 @@
  */
 
 import mongoose from "mongoose";
+import moment from 'moment';
 
 const { Schema } = mongoose;
 
@@ -23,13 +24,14 @@ const userSchema = new Schema({
   nickName: { //닉네임
     type: String,
     required: true,
+    unique: true,
   },
   image: String, // 프로필 사진
   desc: String, // 자기소개
   signUpDt: { // 가입일
     type: Date,
-    default: Date.now
+    default: moment().format('YYYY-MM-DD HH:mm:ss')
   }
-})
+});
 
 module.exports = mongoose.models.users || mongoose.model('users', userSchema);
