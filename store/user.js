@@ -39,8 +39,7 @@ export const actions = {
       try {
         console.log(params);
         const rs = await this.$axios.post('/api/user/sign-up', params);
-        console.log(rs);
-        resolve(true);
+        resolve(rs);
       } catch (err) {
         reject(err);
       }

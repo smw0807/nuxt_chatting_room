@@ -33,6 +33,7 @@
         </v-toolbar>
         <v-card-text class="mt-3 mb-0">
           <v-form @submit.prevent="submit" ref="form">
+            <!-- 이메일 -->
             <v-text-field
               v-model="form.email"
               :rules="rules.email"
@@ -43,6 +44,7 @@
               clearable
             ></v-text-field>
 
+            <!-- 비밀번호 -->
             <v-text-field
               v-model="form.password"
               :rules="rules.password"
@@ -55,6 +57,7 @@
               clearable
             ></v-text-field>
 
+            <!-- 비밀번호 확인 -->
             <v-text-field
               v-model="form.confirmPassword"
               :rules="rules.confirmPassword"
@@ -65,6 +68,7 @@
               clearable
             ></v-text-field>
 
+            <!-- 이름 -->
             <v-text-field
               v-model="form.name"
               :rules="rules.name"
@@ -77,6 +81,7 @@
               clearable
             ></v-text-field>
 
+            <!-- 닉네임 -->
             <v-text-field
               v-model="form.nickName"
               :rules="rules.nickName"
@@ -89,6 +94,7 @@
               clearable
             ></v-text-field>
 
+            <!-- 프로필 이미지 -->
             <v-file-input
               v-model="form.image"
               :rules="rules.avatar"
@@ -100,6 +106,7 @@
               clearable
             ></v-file-input>
 
+            <!-- 자기소개 -->
             <v-textarea
               :counter="formCounter.desc"
               label="자기소개"
@@ -114,7 +121,6 @@
           <span class="caption red--text">* 표시는 필수 입력사항입니다.</span>
         </v-card-text>
         <v-card-actions>
-          <!-- <v-btn color="accent" @click="refresh">초기화</v-btn> -->
           <v-btn color="accent" @click="$refs.form.reset()">초기화</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="submit">가입하기</v-btn>
@@ -224,9 +230,24 @@ export default {
         const formData = new FormData();
         formData.append('info', JSON.stringify(this.form));
         formData.append('image', this.form.image);
+
         const rs = await this.$store.dispatch('user/signup', formData);
-        console.log(rs);
-        
+        if (!rs.data.ok) {
+          await this.$refs.dialog.open({
+            mode: 'alert',
+            type: 'error',
+            title: '회원가입 실패',
+            text: rs.data.msg
+          })
+        } else {
+          await this.$refs.dialog.open({
+            mode: 'alert',
+            type: 'success',
+            title: '회원가입 완료',
+            text: '회원가입에 성공했습니다.\n로그인을 해주시기 바랍니다.'
+          })
+          this.dialog = false;
+        }
       } catch (err) {
         console.error('submit fail...', err);
         await this.$refs.dialog.open({

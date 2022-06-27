@@ -1,6 +1,8 @@
 import express from 'express';
 const router = express.Router();
 
+import { encryptPassword } from '../utils/auth';
+
 import { Users } from '../models';
 
 import multer from 'multer';
@@ -33,12 +35,17 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
     const params = JSON.parse(req.body.info);
     const data = {
       email: params.email,
-      password: params.password,
+      password: encryptPassword(params.password),
       name: params.name,
       nickName: params.nickName,
       image: file === undefined ? null : file.buffer.toString('base64'),
       desc: params.desc || ''
     }
+    const rs = await Users.create(data);
+    //rs에 저장된 정보 그대로 나옴
+    // console.log('result : ', rs);
+    rt.ok = true;
+    rt.msg = 'ok';
   } catch (err) {
     console.error('sign-up Error : ', err);
     rt.msg = err.message;
