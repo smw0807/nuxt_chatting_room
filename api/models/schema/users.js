@@ -28,6 +28,10 @@ const userSchema = new Schema({
   },
   image: String, // 프로필 사진
   desc: String, // 자기소개
+  token: {
+    type: String,
+    default: null,
+  }, // 토큰 (로그인 시 넣어줌);
   signUpDt: { // 가입일
     type: Date,
     default: moment().format('YYYY-MM-DD HH:mm:ss')
