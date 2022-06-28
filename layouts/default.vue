@@ -42,9 +42,10 @@ export default {
       return this.$store.getters['user/info'];
     }
   },
-  created() {
+  async created() {
     console.log('user info : ', this.userInfo);
-    this.setSocket();
+    await this.$store.dispatch('initSockeIO');
+    // this.setSocket();
   },
   methods: {
     async setSocket() {

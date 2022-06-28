@@ -10,8 +10,9 @@
           <v-card-title>
             채팅방 목록
             <v-spacer/>
-            <createRoom />
+            <createRoom v-show="userInfo" />
           </v-card-title>
+          <v-divider />
           <v-card-text>
             <v-btn @click="go">웹소켓테스트</v-btn>
             <v-btn @click="api">api테스트</v-btn>
@@ -39,6 +40,11 @@ export default {
     this.api();
     this.ioTest();
   },
+  computed: {
+    userInfo() {
+      return this.$store.getters['user/info'];
+    }
+  },
   methods: {
     async api() {
       try {
@@ -48,6 +54,7 @@ export default {
       }
     },
     ioTest() {
+      console.log('11');
       this.socket = this.$nuxtSocket({
         name: 'main',
         channel: '/room',

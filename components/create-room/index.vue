@@ -24,7 +24,7 @@
           dense
           outlined
           >
-          <v-toolbar-title class="text-subtitle-1 black--text">방 만들기</v-toolbar-title>
+          <v-toolbar-title class="text-h5 black--text">방 만들기</v-toolbar-title>
           <v-spacer/>
         </v-toolbar>
         <v-card-text class="mt-3 mb-0">

@@ -6,8 +6,7 @@ const app = express();
 let server = null;
 let io = null;
 
-app.all('/init', (req, res) => {
-  console.log("socket test");
+app.get('/init', (req, res) => {
   if (!server) {
     server = res.connection.server;
     io = SocketIO(server);
@@ -20,9 +19,9 @@ app.all('/init', (req, res) => {
         console.log('text message : ', data);
       })
       
-      setInterval(() => {
-        socket.emit('go', 'gogo');
-      }, 3000);
+      // setInterval(() => {
+      //   socket.emit('go', 'gogo');
+      // }, 3000);
       
       socket.on('disconnect', () => {
         console.log('room 네임스페이스 접속 해제');
