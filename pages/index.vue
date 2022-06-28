@@ -10,7 +10,7 @@
           <v-card-title>
             채팅방 목록
             <v-spacer/>
-            <create-room />
+            <createRoom />
           </v-card-title>
         </v-card>
       </v-col>
@@ -20,15 +20,15 @@
 </template>
 
 <script>
-import createRoom from '@/components/createRoom';
+import createRoom from '@/components/create-room';
 export default {
   components: {
     createRoom
   },
   name: 'IndexPage',
-  created() {
+  // created() {
     // this.api();
-  },
+  // },
   methods: {
     async api() {
       try {

@@ -33,7 +33,7 @@
         </v-toolbar>
         <v-card-text class="mt-3 mb-0">
           <v-form @submit.prevent="submit" ref="form">
-            <!-- 이메일 -->
+
             <v-text-field
               v-model="form.email"
               :rules="rules.email"
@@ -44,7 +44,6 @@
               clearable
             ></v-text-field>
 
-            <!-- 비밀번호 -->
             <v-text-field
               v-model="form.password"
               :rules="rules.password"
@@ -57,7 +56,6 @@
               clearable
             ></v-text-field>
 
-            <!-- 비밀번호 확인 -->
             <v-text-field
               v-model="form.confirmPassword"
               :rules="rules.confirmPassword"
@@ -68,7 +66,6 @@
               clearable
             ></v-text-field>
 
-            <!-- 이름 -->
             <v-text-field
               v-model="form.name"
               :rules="rules.name"
@@ -81,7 +78,6 @@
               clearable
             ></v-text-field>
 
-            <!-- 닉네임 -->
             <v-text-field
               v-model="form.nickName"
               :rules="rules.nickName"
@@ -94,7 +90,6 @@
               clearable
             ></v-text-field>
 
-            <!-- 프로필 이미지 -->
             <v-file-input
               v-model="form.image"
               :rules="rules.avatar"
@@ -106,7 +101,6 @@
               clearable
             ></v-file-input>
 
-            <!-- 자기소개 -->
             <v-textarea
               :counter="formCounter.desc"
               label="자기소개"
@@ -141,12 +135,19 @@ export default {
     return {
       dialog: false,
       form: { // 입력 폼 데이터 바인딩
+        //이메일
         email: null,
+        //비밀번호
         password: null,
+        //비밀번호 확인
         confirmPassword: null,
+        //이름
         name: null,
+        //닉네임
         nickName: null,
+        //프로필 이미지
         image: null,
+        //자기소개
         desc: null
       },
 
