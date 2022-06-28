@@ -12,6 +12,10 @@
             <v-spacer/>
             <createRoom />
           </v-card-title>
+          <v-card-text>
+            <v-btn @click="go">웹소켓테스트</v-btn>
+            <v-btn @click="api">api테스트</v-btn>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -26,17 +30,39 @@ export default {
     createRoom
   },
   name: 'IndexPage',
-  // created() {
-    // this.api();
-  // },
+  data() {
+    return {
+      socket: null,
+    }
+  },
+  mounted() {
+    this.api();
+    this.ioTest();
+  },
   methods: {
     async api() {
       try {
         const rs = await this.$axios.post('/api/test');
-        // console.log(rs);
       } catch (err) {
         console.error(err);
       }
+    },
+    ioTest() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        channel: '/room',
+        persist: true,
+        emitTimeout: 1000
+      })
+      this.socket.on('go', (data) => {
+        console.log('go', data);
+        this.socket.emit('gg', 'hihihihihi');
+      })
+    },
+    go() {
+      console.log("dd");
+      console.log(this.socket);
+      this.socket.emit('gg', 'kkkkk');
     }
   }
 }

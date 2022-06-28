@@ -43,9 +43,29 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'nuxt-socket-io'
   ],
-  serverMiddleware: ['@/api/index.js'],
+  // serverMiddleware: ['@/api/index.js'],
+  serverMiddleware: [
+    {
+      path: '/api',
+      handler: '~/api/index.js'
+    },
+    {
+      path: '/sio',
+      handler: '~/api/socket.js'
+    }
+  ],
+  io: {
+    sockets:[
+      {
+        name:'main',
+        url: 'http://localhost:3000',
+        default: true
+      }
+    ]
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

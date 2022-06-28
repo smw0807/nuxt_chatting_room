@@ -42,8 +42,19 @@ export default {
       return this.$store.getters['user/info'];
     }
   },
-  mounted() {
+  created() {
     console.log('user info : ', this.userInfo);
+    this.setSocket();
+  },
+  methods: {
+    async setSocket() {
+      try {
+        const rs = await this.$axios.get('/sio/init');
+        console.log('setSocket : ', rs);
+      } catch (err) {
+        console.error(err);
+      }
+    }
   }
 }
 </script>
