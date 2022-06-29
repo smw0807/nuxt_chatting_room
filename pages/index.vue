@@ -14,8 +14,7 @@
           </v-card-title>
           <v-divider />
           <v-card-text>
-            <v-btn @click="go">웹소켓테스트</v-btn>
-            <v-btn @click="api">api테스트</v-btn>
+            <!-- <v-btn @click="go">웹소켓테스트</v-btn> -->
           </v-card-text>
         </v-card>
       </v-col>
@@ -37,8 +36,7 @@ export default {
     }
   },
   mounted() {
-    this.api();
-    this.ioTest();
+    this.connectRoom();
   },
   computed: {
     userInfo() {
@@ -46,31 +44,25 @@ export default {
     }
   },
   methods: {
-    async api() {
-      try {
-        const rs = await this.$axios.post('/api/test');
-      } catch (err) {
-        console.error(err);
+    connectRoom() {
+      if (!this.socket) {
+        this.socket = this.$nuxtSocket({
+          name: 'main',
+          channel: '/room',
+          persist: true,
+          emitTimeout: 1000
+        })
       }
-    },
-    ioTest() {
-      console.log('11');
-      this.socket = this.$nuxtSocket({
-        name: 'main',
-        channel: '/room',
-        persist: true,
-        emitTimeout: 1000
-      })
       this.socket.on('go', (data) => {
         console.log('go', data);
         this.socket.emit('gg', 'hihihihihi');
       })
     },
-    go() {
-      console.log("dd");
-      console.log(this.socket);
-      this.socket.emit('gg', 'kkkkk');
-    }
+    // go() {
+    //   console.log("dd");
+    //   console.log(this.socket);
+    //   this.socket.emit('gg', 'kkkkk');
+    // }
   }
 }
 </script>
