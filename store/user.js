@@ -29,9 +29,17 @@ export const getters = {
 }
 
 export const actions = {
-  login({ commit }, params) { //로그인
+  signin({ commit }, params) { //로그인
     return new Promise( async (resolve, reject) => {
-
+      try {
+        const rs = await this.$axios.post('/api/user/sign-in', params);
+        if (rs.data.ok) {
+          // commit('info', rs.data.result.)
+        }
+        resolve(rs);
+      } catch (err) {
+        reject(err);
+      }
     })
   },
   signup({ commit }, params) { //회원가입

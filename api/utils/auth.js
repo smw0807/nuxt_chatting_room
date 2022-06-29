@@ -7,9 +7,18 @@ import {
   compareSync
  } from 'bcryptjs';
 
+const jwt = require('jsonwebtoken');
+
+const {
+  access_time,
+  access_key,
+  refresh_time,
+  refresh_key
+} = process.env;
+
 /**
  * 패스워드 암호화
- * @param {패스워드} password 
+ * @param {String} password 패스워드
  * @returns 
  */
 function encryptPassword(password) {
@@ -18,15 +27,38 @@ function encryptPassword(password) {
 
 /**
  * 패스워드 확인
- * @param {입력 패스워드} reqPassword 
- * @param {저장 패스워드} storePassword 
+ * @param {String} reqPassword 입력 패스워드
+ * @param {String} storePassword 저장 패스워드
  * @returns 
  */
 function verifyPassword(reqPassword, storePassword) {
   return compareSync(reqPassword, storePassword);
 }
 
+/**
+ * 
+ * @param {Object} info 사용자 정보
+ * @param {Boolen} isAccess accessToken 발급 여부
+ * @param {Boolen} isRefresh refreshToken 발급 여부
+ */
+function makeToken(info, isAccess, isRefresh) {
+  const result = {
+    access: null,
+    refresh: null
+  }
+  const { email, name, nickName, password } = info;
+
+  if (isAccess)
+    result.access = jwt.sign({email, name, nickName}, access_key, {expiresIn: access_time});
+    
+    if (isRefresh)
+    result.refresh = jwt.sign({email, name, nickName}, refresh_key, {expiresIn: refresh_time});
+
+  return result;
+}
+
 module.exports = {
   encryptPassword,
-  verifyPassword
+  verifyPassword,
+  makeToken
 }

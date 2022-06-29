@@ -34,25 +34,22 @@
         <v-card-text class="mt-3 mb-0">
           <v-form @submit.prevent="submit" ref="form">
             <v-text-field
-              v-model="email"
+              v-model="form.email"
+              :rules="rules.email"
               @keyup.enter="submit"
-              label="Email"
-              name="email"
+              label="이메일"
               prepend-icon="mdi-mail"
               type="text"
-              :rules="emailRules"
               autocomplete="false"
             ></v-text-field>
 
             <v-text-field
-              v-model="password"
+              v-model="form.password"
+              :rules="rules.password"
               @keyup.enter="submit"
-              id="password"
-              label="Password"
-              name="password"
+              label="비밀번호"
               prepend-icon="mdi-lock"
               type="password"
-              :rules="passwdRules"
               autocomplete="false"
             ></v-text-field>
           </v-form>
@@ -64,28 +61,84 @@
           <v-btn color="primary" @click="submit">로그인</v-btn>
         </v-card-actions>
       </v-card>
+      <dial ref="dialog"/>
     </v-dialog>
   </div>
 </template>
 
 <script>
+import dial from '@/components/cmn/dialog';
 import signUp from './sign-up';
 export default {
   components: {
     signUp,
+    dial,
   },
   data() {
     return {
       dialog: false,
-      email: null,
-      password: null,
-      emailRules: [],
-      passwdRules: [],
+
+      form: { // 입력 폼 데이터 바인딩
+        //이메일
+        email: null,
+        //비밀번호
+        password: null,
+      },
+
+      rules: {
+        email: [ v => this.fnRules().email(v ?? '') ],
+        password: [ v => this.fnRules().password(v ?? '') ],
+      },
+
     }
   },
   methods: {
-    submit() {
+    fnRules() {
+      return {
+        email: (v) => {
+          if (v === '') {
+            return '이메일을 입력해주시기 바랍니다.'
+          }
+          if (!v.match(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g)) {
+            return '이메일 형식이 올바르지 않습니다.'
+          }
+          return true;
+        },
+        password: (v) => {
+          if ('') {
+            return '비밀번호를 입력해주시기 바랍니다.';
+          }
+          return true;
+        },
+      }
+    },
+    async submit() {
       console.log('submit');
+      try {
+        if (!this.$refs.form.validate()) return;
+
+        const rs = await this.$store.dispatch('user/signin', this.form);
+        console.log(rs);
+        if (!rs.data.ok) {
+          await this.$refs.dialog.open({
+            mode: 'alert',
+            type: 'warning',
+            title: '로그인 실패',
+            text: rs.data.msg
+          })
+        } else {
+
+        }
+        console.log('rs : ', rs);
+      } catch (err) {
+        console.error('login fail...', err);
+        await this.$refs.dialog.open({
+          mode: 'alert',
+          type: 'error',
+          title: '로그인 실패',
+          text: err
+        })
+      }
     }
   }
 }
