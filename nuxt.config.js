@@ -44,7 +44,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    'nuxt-socket-io'
+    'nuxt-socket-io',
+    // '~/modules/init'
   ],
   // serverMiddleware: ['@/api/index.js'],
   serverMiddleware: [
