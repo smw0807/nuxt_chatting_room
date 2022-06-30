@@ -6,6 +6,7 @@ import {
   encryptPassword, 
   verifyPassword,
   makeToken, 
+  verifyAccessToken,
 } from '../utils/auth';
 
 import { Users } from '../models';
@@ -15,16 +16,6 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage
 });
-
-router.post('/test', async (req, res) => {
-  try {
-    const rs = await Users.find({});
-    console.log(rs);
-  } catch (err) {
-    console.error(err);
-  }
-  res.send({ok: true, msg: 'ok'});
-})
 
 /**
  * 회원가입
@@ -47,7 +38,7 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
       desc: params.desc || ''
     }
     await Users.create(data);
-    
+
     rt.ok = true;
     rt.msg = 'ok';
   } catch (err) {
@@ -58,6 +49,9 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
   res.send(rt);
 })
 
+/**
+ * 로그인
+ */
 router.post('/sign-in', async (req, res) => {
   const rt = {
     ok: false,
@@ -96,6 +90,37 @@ router.post('/sign-in', async (req, res) => {
     };
   } catch (err) {
     console.error('sign-in Error : ', err);
+    rt.msg = err.message;
+    rt.result = err;
+  }
+  res.send(rt);
+});
+
+/**
+ * 토큰 검증 후 사용자 정보 전달
+ */
+router.post('/getUser', async (req, res) => {
+  console.log('gg');
+  const rt = {
+    ok: false,
+    msg: '',
+    result: null
+  }
+  try {
+    const token = await verifyAccessToken(req.headers['access-token']);
+    const user = await Users.findOne({email: token.email});
+    const rtUser = user.toObject();
+    delete rtUser.password;
+    delete rtUser.token;
+
+    console.log(token);
+    console.log(user);
+    rt.ok = true;
+    rt.msg = 'ok';
+    rt.result = rtUser;
+
+  } catch (err) {
+    console.error('/user/getUser Error : ', err);
     rt.msg = err.message;
     rt.result = err;
   }

@@ -57,8 +57,18 @@ function makeToken(info, isAccess, isRefresh) {
   return result;
 }
 
+function verifyAccessToken(token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, access_key, (err, decoded) => {
+      if (err) reject(err);
+      resolve(decoded);
+    })
+  })
+}
+
 module.exports = {
   encryptPassword,
   verifyPassword,
-  makeToken
+  makeToken,
+  verifyAccessToken,
 }

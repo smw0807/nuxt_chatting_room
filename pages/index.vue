@@ -14,6 +14,7 @@
           </v-card-title>
           <v-divider />
           <v-card-text>
+            <v-btn @click="api">API테스트</v-btn>
             <!-- <v-btn @click="go">웹소켓테스트</v-btn> -->
           </v-card-text>
         </v-card>
@@ -44,6 +45,13 @@ export default {
     }
   },
   methods: {
+    async api() {
+      try {
+        await this.$axios.post('/api/test');
+      } catch(err) {
+        console.error(err);
+      }
+    },
     connectRoom() {
       if (!this.socket) {
         this.socket = this.$nuxtSocket({

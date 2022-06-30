@@ -66,7 +66,11 @@ export const actions = {
   },
   verifyToken({ commit }, params) { //토큰 검증
     return new Promise( async (resolve, reject) => {
-
+      try {
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
     })
   },
   refreshToken({ commit }, params) { //토큰 재발급
@@ -76,7 +80,12 @@ export const actions = {
   },
   getInfo({ commit }, params) { //토큰으로 사용자 정보 가져오기 //userInfo가 null일 때만 사용?
     return new Promise( async (resolve, reject) => {
-
+      try {
+        const rs = await this.$axios.post('/api/user/getUser');
+        resolve(rs);
+      } catch (err) {
+        reject(err);
+      }
     })
   },
 }
