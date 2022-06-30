@@ -1,6 +1,11 @@
 /**
  * 사용자 관련 스토어
+ * 
+ * 쿠키
+ * https://www.npmjs.com/package/cookie-universal-nuxt
  */
+
+import { strTimeToSeconds } from '~/utils/converts'
 
 export const state = () => {
   return {
@@ -9,7 +14,6 @@ export const state = () => {
     //   email: 'test@naver.com',
     //   name: 'minwoo',
     //   nickName: 'smw001',
-    //   gender: 'male',
     //   // image: null
     //   image:'v.png'
     // },
@@ -34,7 +38,10 @@ export const actions = {
       try {
         const rs = await this.$axios.post('/api/user/sign-in', params);
         if (rs.data.ok) {
-          // commit('info', rs.data.result.)
+          commit('info', rs.data.result.rtUser);
+          const { access, refresh } = rs.data.result.token;
+          this.$cookiz.set('accessToken', access, { path: '/', maxAge: strTimeToSeconds(this.$config.access_time) });
+          this.$cookiz.set('refreshToken', refresh, { path: '/', maxAge: strTimeToSeconds(this.$config.refresh_time) });
         }
         resolve(rs);
       } catch (err) {
@@ -51,6 +58,11 @@ export const actions = {
         reject(err);
       }
     })
+  },
+  signout({ commit }, params) {
+    commit('info', null);
+    this.$cookiz.remove('accessToken');
+    this.$cookiz.remove('refreshToken');
   },
   verifyToken({ commit }, params) { //토큰 검증
     return new Promise( async (resolve, reject) => {

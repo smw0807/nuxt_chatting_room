@@ -45,6 +45,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     'nuxt-socket-io',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }]
     // '~/modules/init'
   ],
   // serverMiddleware: ['@/api/index.js'],
@@ -66,6 +67,11 @@ export default {
         default: true
       }
     ]
+  },
+
+  publicRuntimeConfig: {
+    access_time: process.env.access_time,
+    refresh_time: process.env.refresh_time,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

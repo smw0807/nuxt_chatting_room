@@ -19,7 +19,7 @@
         <v-list-item-content class="justify-center">
           <div class="mx-auto text-center">
             <avatar />
-            <h3>{{ user.name }}</h3>
+            <h4 class="mt-2">{{ user.name }}</h4>
             <p class="text-caption mt-1">
               {{ user.nickName }}<br>
               {{ user.email }}
@@ -81,7 +81,7 @@ export default {
       this.$store.commit('user/info', test);
     },
     logout() {
-      console.log('로그아웃');
+      this.$store.dispatch('user/signout');
     }
   }
 }

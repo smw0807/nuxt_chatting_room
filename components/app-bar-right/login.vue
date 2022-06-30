@@ -118,7 +118,6 @@ export default {
         if (!this.$refs.form.validate()) return;
 
         const rs = await this.$store.dispatch('user/signin', this.form);
-        console.log(rs);
         if (!rs.data.ok) {
           await this.$refs.dialog.open({
             mode: 'alert',
@@ -127,9 +126,8 @@ export default {
             text: rs.data.msg
           })
         } else {
-
+          this.dialog = false;
         }
-        console.log('rs : ', rs);
       } catch (err) {
         console.error('login fail...', err);
         await this.$refs.dialog.open({

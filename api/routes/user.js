@@ -1,5 +1,6 @@
 import express from 'express';
 const router = express.Router();
+import { cloneDeep } from 'lodash';
 
 import { 
   encryptPassword, 
@@ -45,9 +46,8 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
       image: file === undefined ? null : file.buffer.toString('base64'),
       desc: params.desc || ''
     }
-    const rs = await Users.create(data);
-    //rs에 저장된 정보 그대로 나옴
-    // console.log('result : ', rs);
+    await Users.create(data);
+    
     rt.ok = true;
     rt.msg = 'ok';
   } catch (err) {
@@ -68,24 +68,27 @@ router.post('/sign-in', async (req, res) => {
   try {
     const params = req.body;
     // 사용자 정보 가져오기
-    const findUser = await Users.find({email: params.email});
+    const findUser = await Users.findOne({email: params.email});
     if (findUser.length === 0) throw { message: failMsg};
 
-    const user = findUser[0];
-
+    const user = cloneDeep(findUser);
+    
     // 패스워드 일치하는지 검증
     const passVerify = verifyPassword(params.password, user.password);
     if (!passVerify) throw { message : failMsg };
 
     const { access, refresh } = makeToken(user, true, true);
+    // 사용자 정보에 refresh Token 추가
     await Users.update({email: user.email}, {token: refresh});
 
-    delete Object.getPrototypeOf(user).password;
-    console.log(user);
-    // rt.ok = true;
+    const rtUser = user.toObject();
+    delete rtUser.password;
+    delete rtUser.token;
+
+    rt.ok = true;
     rt.msg = 'ok';
     rt.result = { 
-      user,
+      rtUser,
       token : {
         access, 
         refresh,
