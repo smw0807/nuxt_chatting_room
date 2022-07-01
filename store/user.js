@@ -49,7 +49,7 @@ export const actions = {
       }
     })
   },
-  signup({ commit }, params) { //회원가입
+  signup(params) { //회원가입
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/user/sign-up', params);
@@ -59,16 +59,15 @@ export const actions = {
       }
     })
   },
-  signout({ commit }, params) {
+  signout({ commit }) { //로그아웃
     commit('info', null);
     this.$cookiz.remove('accessToken');
     this.$cookiz.remove('refreshToken');
   },
-  verifyToken({ commit }, params) { //토큰 검증
+  verifyToken({ commit }) { //토큰 검증
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/auth/verify');
-        console.log(rs);
         if (!rs.data.ok) {
           commit('info', null);
           this.$cookiz.remove('accessToken');
@@ -80,7 +79,7 @@ export const actions = {
       }
     })
   },
-  refreshToken({ commit }, params) { //토큰 재발급
+  refreshToken({ commit }) { //토큰 재발급
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/auth/refresh');
@@ -98,7 +97,7 @@ export const actions = {
       }
     })
   },
-  getInfo({ commit }, params) { //토큰으로 사용자 정보 가져오기 //userInfo가 null일 때만 사용?
+  getInfo({ commit }) { //토큰으로 사용자 정보 가져오기 //userInfo가 null일 때만 사용?
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/user/getUser');
@@ -106,6 +105,8 @@ export const actions = {
           commit('info', rs.data.result);
         } else {
           commit('info', null);
+          this.$cookiz.remove('accessToken');
+          this.$cookiz.remove('refreshToken');
         }
         resolve(true);
       } catch (err) {

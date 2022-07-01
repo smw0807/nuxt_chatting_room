@@ -8,7 +8,7 @@ export default async function ( {$cookiz, store }) {
     if (access && user) 
       await store.dispatch('user/verifyToken');
     
-    //새로고침 등의 이유로 쿠키에 토큰은 있는데, 스토어에 데이터가 없을 경우.
+    //토큰만 있으면 검증 후 사용자 정보 가져오기
     if (access && !user)
       await store.dispatch('user/getInfo');
     
