@@ -57,9 +57,28 @@ function makeToken(info, isAccess, isRefresh) {
   return result;
 }
 
+/**
+ * accessToken 검증 함수
+ * @param {String} token 토큰값
+ * @returns 
+ */
 function verifyAccessToken(token) {
   return new Promise((resolve, reject) => {
     jwt.verify(token, access_key, (err, decoded) => {
+      if (err) reject(err);
+      resolve(decoded);
+    })
+  })
+}
+
+/**
+ * refreshToken 검증 함수
+ * @param {String} token  토큰값
+ * @returns 
+ */
+function verifyRefreshToken(token) {
+  return new Promise ((resolve, reject) => {
+    jwt.verify(token, refresh_key, (err, decoded) => {
       if (err) reject(err);
       resolve(decoded);
     })
@@ -71,4 +90,5 @@ module.exports = {
   verifyPassword,
   makeToken,
   verifyAccessToken,
+  verifyRefreshToken
 }

@@ -67,6 +67,13 @@ export const actions = {
   verifyToken({ commit }, params) { //토큰 검증
     return new Promise( async (resolve, reject) => {
       try {
+        const rs = await this.$axios.post('/api/auth/verify');
+        console.log(rs);
+        if (!rs.data.ok) {
+          commit('info', null);
+          this.$cookiz.remove('accessToken');
+          this.$cookiz.remove('refreshToken');
+        }
         resolve(true);
       } catch (err) {
         reject(err);
@@ -75,14 +82,32 @@ export const actions = {
   },
   refreshToken({ commit }, params) { //토큰 재발급
     return new Promise( async (resolve, reject) => {
-
+      try {
+        const rs = await this.$axios.post('/api/auth/refresh');
+        if (rs.data.ok) {
+          commit('info', rs.data.result.rtUser);
+          const { access, refresh } = rs.data.result.token;
+          this.$cookiz.set('accessToken', access, { path: '/', maxAge: strTimeToSeconds(this.$config.access_time) });
+          this.$cookiz.set('refreshToken', refresh, { path: '/', maxAge: strTimeToSeconds(this.$config.refresh_time) });
+        } else {
+          commit('info', null);
+        }
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
     })
   },
   getInfo({ commit }, params) { //토큰으로 사용자 정보 가져오기 //userInfo가 null일 때만 사용?
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/user/getUser');
-        resolve(rs);
+        if (rs.data.ok) {
+          commit('info', rs.data.result);
+        } else {
+          commit('info', null);
+        }
+        resolve(true);
       } catch (err) {
         reject(err);
       }

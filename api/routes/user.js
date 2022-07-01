@@ -109,12 +109,11 @@ router.post('/getUser', async (req, res) => {
   try {
     const token = await verifyAccessToken(req.headers['access-token']);
     const user = await Users.findOne({email: token.email});
+    
     const rtUser = user.toObject();
     delete rtUser.password;
     delete rtUser.token;
 
-    console.log(token);
-    console.log(user);
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = rtUser;
