@@ -7,4 +7,11 @@ router.post('/test', async (req, res) => {
   res.send('ok');
 })
 
+/**
+ * 방 만들기
+ */
+router.post('/create', async (req, res) => {
+  
+})
+
 module.exports = router;

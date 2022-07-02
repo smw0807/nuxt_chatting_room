@@ -47,7 +47,7 @@ export default {
   methods: {
     async api() {
       try {
-        await this.$axios.post('/api/test');
+        await this.$axios.post('/api/room/test');
       } catch(err) {
         console.error(err);
       }
