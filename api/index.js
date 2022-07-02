@@ -1,10 +1,12 @@
 import express from 'express';
+import Morgan from 'morgan';
 import { verifyToken } from './middleware/auth';
 
 require('dotenv').config();
 require('./mongo/connect'); // 몽고디비 연결
 
 const app = express();
+app.use(Morgan('dev'));
 app.use(express.json());
 app.use(verifyToken);
 

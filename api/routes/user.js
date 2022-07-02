@@ -63,7 +63,7 @@ router.post('/sign-in', async (req, res) => {
     const params = req.body;
     // 사용자 정보 가져오기
     const findUser = await Users.findOne({email: params.email});
-    if (findUser.length === 0) throw { message: failMsg};
+    if (!findUser || findUser.length === 0) throw { message: failMsg};
 
     const user = cloneDeep(findUser);
     
