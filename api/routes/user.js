@@ -100,7 +100,6 @@ router.post('/sign-in', async (req, res) => {
  * 토큰 검증 후 사용자 정보 전달
  */
 router.post('/getUser', async (req, res) => {
-  console.log('gg');
   const rt = {
     ok: false,
     msg: '',

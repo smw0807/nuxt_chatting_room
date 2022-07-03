@@ -49,7 +49,7 @@ export const actions = {
       }
     })
   },
-  signup(params) { //회원가입
+  signup({}, params) { //회원가입
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/user/sign-up', params);

@@ -34,6 +34,7 @@
               v-model="form.title"
               :counter="formCounter.title"
               :hint="hint.nickName"
+              :rules="rules.title"
               label="방 제목 *"
               prepend-icon="mdi-format-title"
               type="text"
@@ -45,6 +46,7 @@
               v-model="form.password"
               :counter="formCounter.password"
               :hint="hint.password"
+              :rules="rules.password"
               label="비밀빈호"
               prepend-icon="mdi-lock"
               type="password"
@@ -135,6 +137,26 @@ export default {
       }
     },
     async submit() { // 가입처리
+      try {
+        if (!this.$refs.form.validate()) return;
+        
+        const confirm = await this.$refs.dialog.open({
+          mode: 'confirm',
+          title: '방 만들기',
+          text: '채팅방을 생성하시겠습니까?',
+        })
+        if (!confirm) return;
+        const rs = await this.$store.dispatch('room/create', this.form);
+        console.log('index.vue : ', rs);
+      } catch (err) {
+        console.error('create room fail : ', err);
+        await this.$refs.dialog.open({
+          mode: 'alert',
+          type: 'error',
+          title: '방 생성 실패',
+          text: err.message,
+        })
+      }
     }
   }
 }
