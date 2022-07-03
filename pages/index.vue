@@ -14,7 +14,8 @@
           </v-card-title>
           <v-divider />
           <v-card-text>
-            <v-btn @click="api">API테스트</v-btn>
+            <room-table />
+            <!-- <v-btn @click="api">API테스트</v-btn> -->
             <!-- <v-btn @click="go">웹소켓테스트</v-btn> -->
           </v-card-text>
         </v-card>
@@ -26,9 +27,11 @@
 
 <script>
 import createRoom from '@/components/create-room';
+import roomTable from '@/components/room-table';
 export default {
   components: {
-    createRoom
+    createRoom,
+    roomTable,
   },
   name: 'IndexPage',
   data() {
@@ -45,13 +48,13 @@ export default {
     }
   },
   methods: {
-    async api() {
-      try {
-        await this.$axios.post('/api/room/test');
-      } catch(err) {
-        //console.error(err);
-      }
-    },
+    // async api() { //todo 삭제 예정
+    //   try {
+    //     await this.$axios.post('/api/room/test');
+    //   } catch(err) {
+    //     //console.error(err);
+    //   }
+    // },
     connectRoom() {
       if (!this.socket) {
         this.socket = this.$nuxtSocket({
