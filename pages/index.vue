@@ -49,7 +49,7 @@ export default {
       try {
         await this.$axios.post('/api/room/test');
       } catch(err) {
-        console.error(err);
+        //console.error(err);
       }
     },
     connectRoom() {

@@ -5,10 +5,10 @@ exports.verifyToken = async (req, res, next) => {
     await verifyAccessToken(req.headers['access-token']);
     return next()
   } catch (err) {
-    console.error('API Middleware verityToken Error : ', err);
+    console.log('API Middleware verityToken Error : ', err.message);
     if (err.message.indexOf('malformed') !== -1) { //토큰 없을 때
       return res.status(419).json({
-        message: 'accessToen is Null... Need refreshToken'
+        message: 'accessToken 없음'
       })
     }
     if (err.message.indexOf('invalid') !== -1) { //유효하지 않은 토큰
@@ -17,5 +17,4 @@ exports.verifyToken = async (req, res, next) => {
       })
     }
   }
-  // return next();
 }

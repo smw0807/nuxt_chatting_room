@@ -88,10 +88,11 @@ export const actions = {
           const { access, refresh } = rs.data.result.token;
           this.$cookiz.set('accessToken', access, { path: '/', maxAge: strTimeToSeconds(this.$config.access_time) });
           this.$cookiz.set('refreshToken', refresh, { path: '/', maxAge: strTimeToSeconds(this.$config.refresh_time) });
+          resolve(true);
         } else {
           commit('info', null);
+          resolve(false);
         }
-        resolve(true);
       } catch (err) {
         reject(err);
       }
