@@ -9,7 +9,6 @@ export default function({ $cookiz, $axios, store }) {
   
   //응답 에러 부분
   $axios.onResponseError( async (error) => {
-    console.log('axios Error : ', error);
     if (!$cookiz.get('refreshToken'))
       store.commit('user/info', null);
   
