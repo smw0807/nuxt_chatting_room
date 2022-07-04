@@ -32,11 +32,4 @@ export const actions = {
   updateAlert({commit}, params) {
     commit('setAlert', params);
   },
-  async initSockeIO() {
-    try {
-      await this.$axios.get('/sio/init');
-    } catch (err) {
-      console.error('socket Error : ', err);
-    }
-  }
 }

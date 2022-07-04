@@ -1,36 +1,22 @@
-const express = require('express');
 const SocketIO = require('socket.io');
+module.exports = (server, app) => {
+  const io = SocketIO(server, {
+    path: '/socket.io',
+    cors: {
+      origin: '*',
+      methods: ["GET", "POST"]
+    }
+  });
+  app.set('io', io); 
+  const room = io.of('/room'); 
 
-import { verifyRefreshToken } from './utils/auth';
-
-const app = express();
-
-let server = null;
-let io = null;
-
-app.get('/init', (req, res) => {
-  if (!server) {
-    
-    server = res.connection.server;
-    io = SocketIO(server);
-    app.set('io', io);
-    
-    const room = io.of('/room');
-    room.on('connection', async (socket) => {
-      const user = await verifyRefreshToken(socket.request.headers['refresh-token']);
-      console.log(`room 네임스페이스 접속 [${user.nickName}]`);
-           
-      socket.on('disconnect', () => {
-        console.log(`room 네임스페이스 해제 [${user.nickName}]`);
-      });
+  room.on('connection', async (socket) => {
+    const req = socket.request;
+    console.log(req.headers);
+    console.log(`room 네임스페이스 접속`);
+         
+    socket.on('disconnect', () => {
+      console.log(`room 네임스페이스 해제`);
     });
-  }
-  res.json({ msg : 'socket.io ready'});
-})
-
-
-module.exports = app;
-
-// module.exports = (server, app) => {
-
-// }
+  });
+} 

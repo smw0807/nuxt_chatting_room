@@ -5,9 +5,6 @@ const { verifyToken } = require('../middleware/auth');
 const { verifyAccessToken } = require('../utils/auth');
 const { Room } = require('../models');
 
-// const sio = require('../socket');
-// const io = sio.get('io');
-
 router.post('/test', async (req, res) => {
   console.log('test');
   res.send('ok');
@@ -57,7 +54,8 @@ router.post('/create', verifyToken, async (req, res) => {
     rt.msg = 'ok';
     rt.result = rs;
     
-    // io.of('/room').emit('newRoom');
+    const socket = req.app.get('io');
+    socket.of('/room').emit('newRoom');
   } catch (err) {
     console.error('/room/create Error : ', err);
     rt.msg = err.message;

@@ -13,7 +13,7 @@ export default function({ $cookiz, $axios, store }) {
       store.commit('user/info', null);
   
     const errRes = error.response;
-    const errApi = error.response.config;
+    const errApi = error.response?.config;
     /**
      * accessToken 없을 경우 419 코드 받음.
      * refreshToken 검증 후 이상 없으면 재발급 받고 다시 진행

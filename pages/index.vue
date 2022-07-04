@@ -16,6 +16,9 @@
           <v-card-text>
             <room-table />
           </v-card-text>
+          <v-card-text>
+            <v-btn @click="test">API Test</v-btn>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -46,6 +49,13 @@ export default {
     }
   },
   methods: {
+    async test() {
+      try {
+        const rs = await this.$axios.post('/api/test');
+      } catch (err) {
+        console.error('api test Error : ', err);
+      }
+    },
     connectRoom() {
       if (!this.socket) {
         this.socket = this.$nuxtSocket({
@@ -54,11 +64,12 @@ export default {
           persist: true,
           emitTimeout: 1000
         })
+        
+        this.socket.on('newRoom', async () => {
+          console.log('socket newRoom');
+          await this.$store.dispatch('room/list', {});
+        })
       }
-      this.socket.on('newRoom', async () => {
-        console.log('socket newRoom');
-        await this.$store.dispatch('room/list', {});
-      })
     },
   }
 }

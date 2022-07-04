@@ -5,7 +5,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  // ssr: false,
+  ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - chatting-room',
@@ -45,33 +45,29 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     'nuxt-socket-io',
     ['cookie-universal-nuxt', { alias: 'cookiz' }]
-    // '~/modules/init'
   ],
-  
-  router: {
-    middleware: [ 'auth' ]
+  axios: {
+    proxy: true,
   },
-  // serverMiddleware: [
-  //   {
-  //     path: '/api',
-  //     handler: '~/api/index.js'
-  //   },
-  //   {
-  //     path: '/sio',
-  //     handler: '~/api/socket.js'
-  //   }
-  // ],
+  proxy: {
+    '/api': process.env.api_host
+  },
   io: {
     sockets:[
       {
         name:'main',
-        url: 'http://localhost:3001',
+        url: process.env.api_host,
         default: true
       }
     ]
   },
+  router: {
+    middleware: [ 'auth' ]
+  },
+  
 
   publicRuntimeConfig: {
     access_time: process.env.access_time,

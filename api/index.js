@@ -13,15 +13,13 @@ app.post('/test', (req, res) => {
   res.send('api success');
 })
 
-
-
-app.use('/user', require('./routes/user'));
-app.use('/auth', require('./routes/auth'));
-// app.use('/room', verifyToken, require('./routes/room'));
-app.use('/room', require('./routes/room'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/room', require('./routes/room'));
 
 const server = app.listen(3001, () => {
   console.log('API Start');
 })
 
-// module.exports = app;
+const WebSocket = require('./socket');
+WebSocket(server, app);
