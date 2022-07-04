@@ -12,7 +12,6 @@ module.exports = (server, app) => {
 
   room.on('connection', async (socket) => {
     const req = socket.request;
-    console.log(req.headers);
     console.log(`room 네임스페이스 접속`);
          
     socket.on('disconnect', () => {
