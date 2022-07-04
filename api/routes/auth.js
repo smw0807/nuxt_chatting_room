@@ -1,16 +1,16 @@
 /**
  * 권한 관련
  */
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
-import { 
+const { 
   makeToken, 
   verifyAccessToken,
   verifyRefreshToken,
-} from '../utils/auth';
+} = require('../utils/auth');
 
-import { Users } from '../models';
+const { Users } = require('../models');
 
 /**
  * accessToken 검증

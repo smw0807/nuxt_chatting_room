@@ -53,21 +53,21 @@ export default {
   router: {
     middleware: [ 'auth' ]
   },
-  serverMiddleware: [
-    {
-      path: '/api',
-      handler: '~/api/index.js'
-    },
-    {
-      path: '/sio',
-      handler: '~/api/socket.js'
-    }
-  ],
+  // serverMiddleware: [
+  //   {
+  //     path: '/api',
+  //     handler: '~/api/index.js'
+  //   },
+  //   {
+  //     path: '/sio',
+  //     handler: '~/api/socket.js'
+  //   }
+  // ],
   io: {
     sockets:[
       {
         name:'main',
-        url: 'http://localhost:3000',
+        url: 'http://localhost:3001',
         default: true
       }
     ]

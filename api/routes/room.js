@@ -1,13 +1,12 @@
-import express from 'express';
-
+const express = require('express');
 const router = express.Router();
 
-import { verifyToken } from '../middleware/auth';
-import { verifyAccessToken } from '../utils/auth';
-import { Room } from '../models';
+const { verifyToken } = require('../middleware/auth');
+const { verifyAccessToken } = require('../utils/auth');
+const { Room } = require('../models');
 
-const sio = require('../socket');
-const io = sio.get('io');
+// const sio = require('../socket');
+// const io = sio.get('io');
 
 router.post('/test', async (req, res) => {
   console.log('test');
@@ -58,7 +57,7 @@ router.post('/create', verifyToken, async (req, res) => {
     rt.msg = 'ok';
     rt.result = rs;
     
-    io.of('/room').emit('newRoom');
+    // io.of('/room').emit('newRoom');
   } catch (err) {
     console.error('/room/create Error : ', err);
     rt.msg = err.message;
