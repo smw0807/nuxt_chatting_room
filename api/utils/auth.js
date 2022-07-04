@@ -36,24 +36,18 @@ function verifyPassword(reqPassword, storePassword) {
 }
 
 /**
- * 
- * @param {Object} info 사용자 정보
- * @param {Boolen} isAccess accessToken 발급 여부
- * @param {Boolen} isRefresh refreshToken 발급 여부
+ * 토큰 만들기
+ * @param {Object} info 토큰 만들 때 사용할 사용자 정보
+ * @returns 
  */
-function makeToken(info, isAccess, isRefresh) {
+function makeToken(info) {
   const result = {
     access: null,
     refresh: null
   }
   const { email, name, nickName, password } = info;
-
-  if (isAccess)
-    result.access = jwt.sign({email, name, nickName}, access_key, {expiresIn: access_time});
-    
-    if (isRefresh)
-    result.refresh = jwt.sign({email, name, nickName}, refresh_key, {expiresIn: refresh_time});
-
+  result.access = jwt.sign({email, name, nickName}, access_key, {expiresIn: access_time});
+  result.refresh = jwt.sign({email, name, nickName}, refresh_key, {expiresIn: refresh_time});
   return result;
 }
 

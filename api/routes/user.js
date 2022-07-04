@@ -71,7 +71,7 @@ router.post('/sign-in', async (req, res) => {
     const passVerify = verifyPassword(params.password, user.password);
     if (!passVerify) throw { message : failMsg };
 
-    const { access, refresh } = makeToken(user, true, true);
+    const { access, refresh } = makeToken(user);
     // 사용자 정보에 refresh Token 추가
     await Users.update({email: user.email}, {token: refresh});
 
@@ -108,7 +108,7 @@ router.post('/getUser', async (req, res) => {
   try {
     const token = await verifyAccessToken(req.headers['access-token']);
     const user = await Users.findOne({email: token.email});
-    
+
     const rtUser = user.toObject();
     delete rtUser.password;
     delete rtUser.token;

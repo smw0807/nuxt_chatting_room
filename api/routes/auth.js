@@ -56,7 +56,7 @@ router.post('/refresh', async (req, res) => {
       throw { message: 'refreshToken 변조 의심'};
     }
     
-    const {access, refresh} = makeToken(user, true, true);
+    const {access, refresh} = makeToken(user);
     // 사용자 정보에 refresh Token 추가
     await Users.update({email: user.email}, {token: refresh});
 
