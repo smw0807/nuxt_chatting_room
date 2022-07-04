@@ -2,6 +2,7 @@ import express from 'express';
 
 const router = express.Router();
 
+import { verifyToken } from '../middleware/auth';
 import { verifyAccessToken } from '../utils/auth';
 import { Room } from '../models';
 
@@ -35,7 +36,7 @@ router.post('/list', async (req, res) => {
 /**
  * 방 만들기
  */
-router.post('/create', async (req, res) => {
+router.post('/create', verifyToken, async (req, res) => {
   const rt = {
     ok: false,
     msg: '',

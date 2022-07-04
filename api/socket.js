@@ -9,8 +9,8 @@ let server = null;
 let io = null;
 
 app.get('/init', async (req, res) => {
+  const user = await verifyRefreshToken(req.headers['refresh-token']);
   if (!server) {
-    // const user = await verifyRefreshToken(req.headers['refresh-token']);
 
     server = res.connection.server;
     io = SocketIO(server);
@@ -18,10 +18,12 @@ app.get('/init', async (req, res) => {
 
     const room = io.of('/room');
     room.on('connection', (socket) => {
-      console.log(`room 네임스페이스 접속`);
+      // console.log(`room 네임스페이스 접속`);
+      console.log(`room 네임스페이스 접속 [${user.nickName}]`);
            
       socket.on('disconnect', () => {
-        console.log(`room 네임스페이스 접속 해제`);
+        console.log(`room 네임스페이스 해제 [${user.nickName}]`);
+        // console.log(`room 네임스페이스 접속 해제`);
       });
     });
   }

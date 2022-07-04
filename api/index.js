@@ -1,7 +1,8 @@
 import express from 'express';
 import Morgan from 'morgan';
-import { verifyToken } from './middleware/auth';
+// import { verifyToken } from './middleware/auth';
 
+// require('events').EventEmitter.prototype._maxListeners = 15;
 require('dotenv').config();
 require('./mongo/connect'); // 몽고디비 연결
 
@@ -16,7 +17,8 @@ app.post('/test', (req, res) => {
 
 app.use('/user', require('./routes/user'));
 app.use('/auth', require('./routes/auth'));
-app.use('/room', verifyToken, require('./routes/room'));
+// app.use('/room', verifyToken, require('./routes/room'));
+app.use('/room', require('./routes/room'));
 
 
 module.exports = app;
