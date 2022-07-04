@@ -15,8 +15,6 @@
           <v-divider />
           <v-card-text>
             <room-table />
-            <!-- <v-btn @click="api">API테스트</v-btn> -->
-            <!-- <v-btn @click="go">웹소켓테스트</v-btn> -->
           </v-card-text>
         </v-card>
       </v-col>
@@ -48,13 +46,6 @@ export default {
     }
   },
   methods: {
-    // async api() { //todo 삭제 예정
-    //   try {
-    //     await this.$axios.post('/api/room/test');
-    //   } catch(err) {
-    //     //console.error(err);
-    //   }
-    // },
     connectRoom() {
       if (!this.socket) {
         this.socket = this.$nuxtSocket({
@@ -64,16 +55,11 @@ export default {
           emitTimeout: 1000
         })
       }
-      this.socket.on('go', (data) => {
-        console.log('go', data);
-        this.socket.emit('gg', 'hihihihihi');
+      this.socket.on('newRoom', async () => {
+        console.log('socket newRoom');
+        await this.$store.dispatch('room/list', {});
       })
     },
-    // go() {
-    //   console.log("dd");
-    //   console.log(this.socket);
-    //   this.socket.emit('gg', 'kkkkk');
-    // }
   }
 }
 </script>

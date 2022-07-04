@@ -136,7 +136,7 @@ export default {
         },
       }
     },
-    async submit() { // 가입처리
+    async submit() {
       try {
         if (!this.$refs.form.validate()) return;
         
@@ -147,7 +147,16 @@ export default {
         })
         if (!confirm) return;
         const rs = await this.$store.dispatch('room/create', this.form);
-        console.log('index.vue : ', rs);
+        if (rs.data.ok) {
+          this.dialog = false;
+        } else {
+          await this.$refs.dialog.open({
+            mode: 'alert',
+            type: 'error',
+            title: '방 생성 실패',
+            text: err.message,
+          })
+        }
       } catch (err) {
         console.error('create room fail : ', err);
         await this.$refs.dialog.open({

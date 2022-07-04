@@ -25,8 +25,14 @@ export const actions = {
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/room/list', params);
-        console.log('rs : ', rs);
-        resolve(rs);
+        if (rs.data.ok) {
+          commit('list', rs.data.result);
+        } else { 
+          commit('list', []);
+          console.error(rs.data.msg);
+          console.error(rs.data.result);
+        }
+        resolve(true);
       } catch (err) {
         reject(err);
       }
@@ -36,7 +42,6 @@ export const actions = {
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/room/create', params);
-        console.log('rs : ', rs);
         resolve(rs);
       } catch (err) {
         reject(err);

@@ -5,9 +5,31 @@ const router = express.Router();
 import { verifyAccessToken } from '../utils/auth';
 import { Room } from '../models';
 
+const sio = require('../socket');
+const io = sio.get('io');
+
 router.post('/test', async (req, res) => {
   console.log('test');
   res.send('ok');
+})
+
+router.post('/list', async (req, res) => {
+  const rt = {
+    ok: false,
+    msg: '',
+    result: null
+  }
+  try {
+    const list = await Room.find({}).sort({createdDate:  -1});
+    rt.ok = true;
+    rt.msg = 'ok';
+    rt.result = list;
+  } catch (err) {
+    console.error('/room/list Error : ', err);
+    rt.msg = err.message;
+    rt.result = err;
+  }
+  res.send(rt);
 })
 
 /**
@@ -34,6 +56,8 @@ router.post('/create', async (req, res) => {
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = rs;
+    
+    io.of('/room').emit('newRoom');
   } catch (err) {
     console.error('/room/create Error : ', err);
     rt.msg = err.message;
