@@ -16,15 +16,25 @@ export default {
     users,
     chatting,
   },
-  asyncData({params}) {
+  // asyncData({isDev, route, store, env, params, query, req, res, redirect, error}) {
+    
+  // },
+  async asyncData({params, store}) {
     const _id = params.chat;
     console.log("_id : ", _id);
+    try {
+      await store.dispatch('room/connection', {id: _id});
+    } catch (err) {
+
+    }
   },
   created() {
     console.log("created");
+    this.connectChat();
   },
   data() {
     return {
+      test: 'test',
       socket: null,
     }
   },
@@ -34,6 +44,14 @@ export default {
     }
   },
   methods: {
+    connectChat() {
+      this.socket = this.$nuxtSocket({
+        name: 'main',
+        channel: '/chat',
+        persist: true,
+        emitTimeout: 1000
+      });
+    },
     sendMsg(v) {
       console.log("sendMsg : ", v);
       //todo 여기서 이제 소켓 처리하기?

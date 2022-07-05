@@ -64,4 +64,29 @@ router.post('/create', verifyToken, async (req, res) => {
   res.send(rt);
 })
 
+/**
+ * 방 입장
+ */
+router.get('/room/:id', async (req, res) => {
+  console.log("??????");
+  const rt = {
+    ok: false,
+    msg: 'ok',
+    result: null
+  }
+  try {
+    // const _id = ;
+    const room = await Room.findOne({_id: req.params.id});
+    console.log(room);
+    const socket = req.app.get('io');
+    const { rooms } = socket.of('/chat').adapter;
+    console.log(rooms);
+
+  } catch (err) {
+    rt.msg = err.message;
+    rt.result = err;
+  }
+  res.send(rt);
+})
+
 module.exports = router;

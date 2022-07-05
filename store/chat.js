@@ -37,5 +37,15 @@ export const getters = {
 }
 
 export const actions = {
-  
+  connection( {commit }, params) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const rs = await this.$axios.get('/api/room/' + params.id);
+        console.log('rs : ', rs);
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
+    })
+  }
 }

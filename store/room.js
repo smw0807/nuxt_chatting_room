@@ -47,5 +47,16 @@ export const actions = {
         reject(err);
       }
     })
-  }
+  },
+  connection( {commit }, params) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const rs = await this.$axios.get('/api/room/' + params.id);
+        console.log('rs : ', rs);
+        resolve(true);
+      } catch (err) {
+        reject(err);
+      }
+    })
+  },
 }
