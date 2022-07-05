@@ -1,6 +1,6 @@
-import Chat from './schema/chat';
-import Room from './schema/room';
-import Users from './schema/users';
+const Chat = require('./schema/chat');
+const Room = require('./schema/room');
+const Users = require('./schema/users');
 
 module.exports = {
   Chat,

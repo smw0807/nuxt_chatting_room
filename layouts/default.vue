@@ -41,9 +41,6 @@ export default {
       return this.$store.getters['user/info'];
     }
   },
-  async created() {
-    await this.$store.dispatch('initSockeIO');
-  },
   methods: {
   }
 }

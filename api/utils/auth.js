@@ -2,11 +2,7 @@
  * 권한 및 암호화 관련 함수들
  */
 
-import { 
-  hashSync,
-  compareSync
- } from 'bcryptjs';
-
+const { hashSync, compareSync } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const {

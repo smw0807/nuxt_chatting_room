@@ -2,8 +2,7 @@
  * 채팅 메세지 스키마
  * 화면에 보여줄 채팅 내용
  */
-import mongoose from "mongoose";
-
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { Types: { ObjectId } } = Schema;
 

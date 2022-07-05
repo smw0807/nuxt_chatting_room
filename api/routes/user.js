@@ -1,17 +1,18 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import { cloneDeep } from 'lodash';
 
-import { 
+const multer = require('multer');
+const { cloneDeep } = require('lodash');
+
+const { 
   encryptPassword, 
   verifyPassword,
   makeToken, 
   verifyAccessToken,
-} from '../utils/auth';
+} = require('../utils/auth');
 
-import { Users } from '../models';
+const { Users } = require('../models');
 
-import multer from 'multer';
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage

@@ -1,8 +1,6 @@
-import express from 'express';
-import Morgan from 'morgan';
-// import { verifyToken } from './middleware/auth';
+const express = require('express');
+const Morgan = require('morgan');
 
-// require('events').EventEmitter.prototype._maxListeners = 15;
 require('dotenv').config();
 require('./mongo/connect'); // 몽고디비 연결
 
@@ -15,10 +13,13 @@ app.post('/test', (req, res) => {
   res.send('api success');
 })
 
-app.use('/user', require('./routes/user'));
-app.use('/auth', require('./routes/auth'));
-// app.use('/room', verifyToken, require('./routes/room'));
-app.use('/room', require('./routes/room'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/room', require('./routes/room'));
 
+const server = app.listen(3001, () => {
+  console.log('API Start');
+})
 
-module.exports = app;
+const WebSocket = require('./socket');
+WebSocket(server, app);

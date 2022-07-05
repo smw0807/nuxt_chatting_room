@@ -1,16 +1,16 @@
 /**
  * 권한 관련
  */
-import express from 'express';
+const express = require('express');
 const router = express.Router();
 
-import { 
+const { 
   makeToken, 
   verifyAccessToken,
   verifyRefreshToken,
-} from '../utils/auth';
+} = require('../utils/auth');
 
-import { Users } from '../models';
+const { Users } = require('../models');
 
 /**
  * accessToken 검증
@@ -52,8 +52,8 @@ router.post('/refresh', async (req, res) => {
     //사용자 정보 가져오기 및 refreshToken 일치 여부 확인
     const user = await Users.findOne({emial: check.email});
     if (reqRefresh !== user.token) {
-      console.log('refreshToken 변조 의심');
-      throw { message: 'refreshToken 변조 의심'};
+      console.log('refreshToken 변조 혹은 만료');
+      throw { message: 'refreshToken 변조 혹은 만료'};
     }
     
     const {access, refresh} = makeToken(user);

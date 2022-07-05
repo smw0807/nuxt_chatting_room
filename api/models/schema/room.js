@@ -1,8 +1,7 @@
 /**
  * 채팅방 스키마
  */
-import mongoose from "mongoose";
-
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const roomSchema = new Schema({

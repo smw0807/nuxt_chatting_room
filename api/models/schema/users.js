@@ -2,8 +2,8 @@
  * 사용자 스키마
  */
 
-import mongoose from "mongoose";
-import moment from 'moment';
+const mongoose = require("mongoose");
+const moment = require('moment');
 
 const { Schema } = mongoose;
 
