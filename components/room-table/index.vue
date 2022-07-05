@@ -13,7 +13,17 @@
       <template v-slot:[`item`]="{item, index}">
         <tr class="text-center">
           <td>{{list.length - index}}</td>
-          <td>{{item.title}}</td>
+          <td>
+            <div v-if="item.password === '' || item.password === null">
+              {{item.title}} <v-icon small>mdi-lock</v-icon> 
+            </div>
+            <div v-else>
+              {{item.title}}
+            </div>
+          </td>
+          <td>
+            <v-btn @click="join(item._id)" small class="info">들어가기</v-btn>
+          </td>
           <td>{{item.max}}</td>
           <td>{{item.owner}}</td>
           <td>{{item.createdDate}}</td>
@@ -33,7 +43,8 @@ export default {
       loading: false,
       headers: [
         { text: 'No.', value: '_id', align: 'center', width: '10%', sortable: false},
-        { text: '방제목', value: 'title', align: 'center', width: '45%'},
+        { text: '방제목', value: 'title', align: 'center' },
+        { text: '-', value: 'max', align: 'center', width: '15%'},
         { text: '허용인원', value: 'max', align: 'center', width: '15%'},
         { text: '생성자', value: 'owner', align: 'center', width: '20%'},
         { text: '생성일', value: 'createdDate', align: 'center', width: '10%'},
@@ -61,6 +72,10 @@ export default {
         console.error(err);
       }
       this.loading = false;
+    },
+    join(id) {
+      console.log('id : ', id);
+      this.$router.push(`/chat/${id}`);
     }
   }
 }
