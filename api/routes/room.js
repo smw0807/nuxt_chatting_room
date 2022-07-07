@@ -67,8 +67,7 @@ router.post('/create', verifyToken, async (req, res) => {
 /**
  * 방 입장
  */
-router.get('/room/:id', async (req, res) => {
-  console.log("??????");
+router.get('/:id', verifyToken, async (req, res) => {
   const rt = {
     ok: false,
     msg: 'ok',
@@ -88,5 +87,22 @@ router.get('/room/:id', async (req, res) => {
   }
   res.send(rt);
 })
+
+/**
+ * 채팅 메세지 보내기
+ */
+// router.post('/:id/chat', async (req, res) => {
+//   const rt = {
+//     ok: false,
+//     msg: '',
+//     result: null,
+//   }
+//   try {
+//   } catch (err) {
+//     rt.msg = err.message;
+//     rt.result = err;
+//   }
+//   res.send(rt);
+// })
 
 module.exports = router;

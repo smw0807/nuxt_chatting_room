@@ -45,16 +45,25 @@ export default {
   },
   methods: {
     connectChat() {
-      this.socket = this.$nuxtSocket({
-        name: 'main',
-        channel: '/chat',
-        persist: true,
-        emitTimeout: 1000
+      if (!this.socket) {
+        this.socket = this.$nuxtSocket({
+          name: 'main',
+          channel: '/chat',
+          persist: true,
+          emitTimeout: 1000
+        });
+      }
+      this.socket.on('systemMessage', (data) => {
+
       });
+      this.socket.on('userMessage', (data) => {
+
+      })
     },
     sendMsg(v) {
       console.log("sendMsg : ", v);
       //todo 여기서 이제 소켓 처리하기?
+      this.socket.emit('sendMessage', v);
     }
   }
 }

@@ -1,4 +1,4 @@
-export default function({ $cookiz, $axios, store }) {
+export default function({ $cookiz, $axios, store, redirect }) {
   //요청 부분
   $axios.onRequest(config => {
     config.timeout = 6000;
@@ -24,6 +24,7 @@ export default function({ $cookiz, $axios, store }) {
         return $axios(errApi);
       else {
         store.dispatch('user/signout');
+        redirect('/');
       }
     }
     if (errRes.status === 401) //accessToken 조작 의심시 그냥 로그아웃
