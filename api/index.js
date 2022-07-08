@@ -16,6 +16,7 @@ app.post('/test', (req, res) => {
 app.use('/api/user', require('./routes/user'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/room', require('./routes/room'));
+app.use('/api/chat', require('./routes/chat'));
 
 const server = app.listen(3001, () => {
   console.log('API Start');

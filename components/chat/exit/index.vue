@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: flex; justify-content: end;">
     <v-btn
       @click="exit"
       text
@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     async exit() {
-      
       const isExit = await this.$refs.dialog.open({
         mode: 'confirm',
         type: 'info',
@@ -28,6 +27,7 @@ export default {
       })
       if (isExit) {
         //todo 소켓 로직 추가??
+        this.$emit('soekct-exit');
         this.$router.push('/');
       }
     }

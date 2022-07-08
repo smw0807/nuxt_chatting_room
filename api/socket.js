@@ -12,7 +12,6 @@ module.exports = (server, app) => {
   const chat = io.of('/chat');
 
   room.on('connection', (socket) => {
-    const req = socket.request;
     console.log(`room 네임스페이스 접속`);
          
     socket.on('disconnect', () => {
@@ -21,10 +20,47 @@ module.exports = (server, app) => {
   });
 
   chat.on('connection', (socket) => {
-    const req = socket.request;
     console.log('chat 네임스페이스 접속');
-    // console.log(req.headers);
-
+    
+    //방 접속
+    socket.on('join', (data) => {
+      const roomId = data.roomId;
+      const user = data.user;
+      socket.join(roomId); 
+      socket.to(roomId).emit('message', {
+        type:'system',
+        user: null,
+        message: `${user.nickName} 님이 입장하셨습니다.`
+      });
+    })
+    socket.on('sendMessage', (data) => {
+      const roomId = data.roomId;
+      const user = data.user;
+      const msg = data.msg;
+      socket.to(roomId).emit('message', {
+        type: 'user',
+        user: user.nickName,
+        message: msg,
+      });
+    })
+    socket.on('exit', (data) => {
+      const roomId = data.roomId;
+      const user = data.user;
+      socket.leave(roomId);
+      const currentRoom = socket.adapter.rooms.get(roomId); //현재 방에 참여중인 소켓 정보?
+      const userCount = currentRoom ? currentRoom.size : 0;
+      console.log('userCount? ', userCount);
+      if (userCount === 0) {
+        //todo 방에 남은 사람이 없으면 방 삭제 로직 추가
+      } else {
+        socket.to(roomId).emit('message', {
+          type: 'system',
+          user: null,
+          message: `${user.nickName} 님이 퇴장하셨습니다.`,
+        });
+      }
+    })
+    // console.log(socket.adapter)
     socket.on('disconnect', async () => {
       console.log('chat 네임스페이스 해제');
     })

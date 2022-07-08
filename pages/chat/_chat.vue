@@ -2,49 +2,61 @@
   <div>
     <!-- 채팅방 왼쪽 방 참여자 목록 -->
     <users /> 
+    <v-row>
+      <v-col cols="9">
+        <span class="text-h4">{{info.title}}</span>
+      </v-col>
+      <v-col cols="3">
+        <exit @soekct-exit="exit"/>
+      </v-col>
+    </v-row>
     <!-- 채팅방 오른쪽 채팅 -->
-    <chatting @send-message="sendMsg"/>
+    <chatting :message="receiveMsg" @send-message="sendMsg"/>
   </div>
 </template>
 
 <script>
 import users from '@/components/chat/users';
 import chatting from '@/components/chat/chatting';
+import exit from '@/components/chat/exit';
 export default {
   layout: 'chat',
   components: {
     users,
     chatting,
-  },
-  // asyncData({isDev, route, store, env, params, query, req, res, redirect, error}) {
-    
-  // },
-  async asyncData({params, store}) {
-    const _id = params.chat;
-    console.log("_id : ", _id);
-    try {
-      await store.dispatch('room/connection', {id: _id});
-    } catch (err) {
-
-    }
+    exit
   },
   created() {
-    console.log("created");
-    this.connectChat();
+    this.roomId = this.$route.params.chat;
+  },
+  async mounted() {
+    await this.connectChat();
+  },
+  destroyed() {
+    this.socket = null;
   },
   data() {
     return {
-      test: 'test',
       socket: null,
+      roomId: null,
+      receiveMsg: [],
     }
   },
   computed: {
+    user() {
+      return this.$store.getters['user/info'];
+    },
     info() {
-      return this.$store.getters['chat/info'];
+      return this.$store.getters['room/info'];
     }
   },
   methods: {
-    connectChat() {
+    async connectChat() {
+      try {
+        await this.$store.dispatch('room/connection', {id: this.roomId});
+      } catch (err) {
+        console.error(err);
+      }
       if (!this.socket) {
         this.socket = this.$nuxtSocket({
           name: 'main',
@@ -53,17 +65,20 @@ export default {
           emitTimeout: 1000
         });
       }
-      this.socket.on('systemMessage', (data) => {
-
+      this.socket.on('message', (data) => {
+        this.receiveMsg.push(data);
       });
-      this.socket.on('userMessage', (data) => {
-
-      })
+      this.join();
     },
-    sendMsg(v) {
-      console.log("sendMsg : ", v);
-      //todo 여기서 이제 소켓 처리하기?
-      this.socket.emit('sendMessage', v);
+    join() { //방 소켓 접속?
+      this.socket.emit('join', { user: this.user, roomId: this.roomId});
+    },
+    exit() { //방 소켓 접속 해제
+      this.socket.emit('exit', {user: this.user, roomId: this.roomId});
+    },
+    async sendMsg(v) {
+      this.receiveMsg.push({ user: this.user, roomId: this.roomId, msg: v});
+      this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, msg: v});
     }
   }
 }

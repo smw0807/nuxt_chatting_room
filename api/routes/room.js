@@ -67,7 +67,7 @@ router.post('/create', verifyToken, async (req, res) => {
 /**
  * 방 입장
  */
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/join/:id', verifyToken, async (req, res) => {
   const rt = {
     ok: false,
     msg: 'ok',
@@ -76,11 +76,20 @@ router.get('/:id', verifyToken, async (req, res) => {
   try {
     // const _id = ;
     const room = await Room.findOne({_id: req.params.id});
-    console.log(room);
     const socket = req.app.get('io');
     const { rooms } = socket.of('/chat').adapter;
-    console.log(rooms);
-
+    console.log('roomId : ', req.params.id);
+    console.log('rooms : ', rooms);
+    /**
+     * todo 접속하려는 방 접속인원 꽉 찼는지 확인하는 로직 추가
+     * todo 접속하려는 방이 비밀번호 방이면 비밀번호 맞는지 확인하는 로직 추가
+     */
+    // socket.of('/chat').join(req.params.id);
+    // const user = await verifyAccessToken(req.headers['access-token']);
+    // socket.of('/chat').to(req.params.id).emit('systemMessage', `${user.nickName} 님이 접속하셨습니다`);
+    rt.ok = true;
+    rt.msg = 'ok';
+    rt.result = room;
   } catch (err) {
     rt.msg = err.message;
     rt.result = err;

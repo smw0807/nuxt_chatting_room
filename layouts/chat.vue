@@ -8,8 +8,7 @@
       >
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-divider vertical/>
-      <exit />
+      <profile />
     </v-app-bar>
 
     <v-main>
@@ -22,19 +21,19 @@
 </template>
 
 <script>
-import exit from '@/components/chat/exit';
+import profile from '@/components/app-bar-right/profile';
 export default {
   components: {
-    exit,
+    profile,
   },
   data() {
     return {
-
+      title: 'Nuxt Chat'
     }
   },
   computed: {
-    title() {
-      return this.$store.getters['chat/title'];
+    info() {
+      return this.$store.getters['room/info'];
     }
   }
 }

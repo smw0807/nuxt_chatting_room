@@ -74,7 +74,6 @@ export default {
       this.loading = false;
     },
     join(id) {
-      console.log('id : ', id);
       this.$router.push(`/chat/${id}`);
     }
   }

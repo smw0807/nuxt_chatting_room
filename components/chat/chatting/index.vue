@@ -2,12 +2,15 @@
   <div>
     <v-card>
       <v-card-text>
-
         <v-card 
           outlined
-          :height="resize_height - 220"
+          :height="resize_height - 280"
+          :max-height="resize_height - 280"
           >
           <v-card-text>
+            <!--  -->
+            
+            <!--  -->
           </v-card-text>
         </v-card>
       </v-card-text>
@@ -16,7 +19,7 @@
           rounded
           outlined
           hide-details
-          v-model="message"
+          v-model="inputMsg"
           append-icon="mdi-send"
           @keyup.enter="sendMessage"
           @click:append="sendMessage"
@@ -32,15 +35,19 @@ export default {
   mixins: [
     resize
   ],
+  props: {
+    message: {
+      type: Array
+    }
+  },
   data() {
     return {
-      message: null,
-      msg: [ // page 쪽에서 props로 받는 쪽으로 할까??
-        { nickName: 'GkaRiss', massegs: 'ㅎㅇㅎㅇㅎㅇ' },
-        { nickName: 'minu', massegs: 'ㅎㅇㅎㅇㅎㅇ' },
-        { nickName: 'GkaRiss', massegs: 'ㅎㅇㅎㅇㅎㅇ' },
-        { nickName: 'GkaRiss', massegs: 'ㅎㅇㅎㅇㅎㅇ' },
-      ]
+      inputMsg: null,
+    }
+  },
+  watch: {
+    message(v) {
+      console.log('watch message : ', v);
     }
   },
   computed:{
@@ -50,8 +57,10 @@ export default {
   },
   methods: {
     sendMessage() {
-      this.$emit('send-message', this.message);
-      this.message = null;
+      if (this.inputMsg) {
+        this.$emit('send-message', this.inputMsg);
+        this.inputMsg = null;
+      }
     }
   }
 }

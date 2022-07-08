@@ -149,6 +149,7 @@ export default {
         const rs = await this.$store.dispatch('room/create', this.form);
         if (rs.data.ok) {
           this.dialog = false;
+          this.$router.push('/chat/' + rs.data.result._id);
         } else {
           await this.$refs.dialog.open({
             mode: 'alert',
