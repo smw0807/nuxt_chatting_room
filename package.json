@@ -6,6 +6,7 @@
     "dev": "nuxt",
     "backend": "nodemon ./server/index.js",
     "dev_all": "concurrently \"npm run backend\" \"npm run dev\"",
+    "all_start": "concurrently \"npm run backend\" \"npm start\"",
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",

@@ -1,72 +1,55 @@
 # nuxt_chatting_room
 vue2 기반 nuxt와 socket.io nuxt-socket-io를 이용한 채팅방
+# 만든 이유
+항상 새로운 걸 습득하기 위해 공부하다 보면 꼭 아무리 봐도 머리속에 안들어오는 것들이 있는데, 그중 하나가 웹소켓이였음. <br>책을 통해 socket.io를 이용한 채팅방 구현을 따라 하면서 드디어 좀 이해가 좀 되길래 제대로 머리 속에 집어 넣기 위해선 이걸 이용해 다른걸 만들어 봐야할 것 같았음. <br>
+개인 적으로 Vue가 재밌기도 했고 요근래 회사에서 Vue를 너무 못하다 보니 까먹을 것 같아서 Vue를 이용해 만들어보고 싶었고 NuxtJS가 편리해서 NuxtJs를 선택함.<br>
+처음 목적은 간단하게 만드는 거였지만, 욕심이 생겨 기능을 하나하나 추가하다 보니 작업이 길어짐...
 
-# chatting-room
+# 사용한 것
+Vue2, NuxtJS, Vuetify, Express, mongodb(mongoose), JWT, Socket.IO, nuxt-socket-io 등...
 
-## Build Setup
-
-```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
+# 실행 방법
+## npm install
+nuxt_chatting_room 에서 `npm i` 그리고 server 디렉터리에서도 `npm i`로 npm 모두 설치.
+## .env
+nuxt_chatting_room, server 디렉터리에 각각 .env 파일 생성
+### env 옵션
 ```
+### MongoDB ###
+mongo_url=
+mongo_db=
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+### token ###
+access_time=
+access_key=
+refresh_time=
+refresh_key=
 
-## Special Directories
+### proxy ###
+api_host=
+```
+양 쪽에 필요한 이유는 `npm run dev_all` 때문에 양쪽에 필요함.
 
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
+### 명령어
+```
+# nuxt_chatting_room 실행 (개발모드)
+npm run dev
 
-### `assets`
+# server 실행
+cd server
+npm start
 
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
+# 웹, 서버 동시 실행 (개발모드로)
+npm run dev_all
 
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
+# 빌드 및 실행
+npm run build
+npm run start
 
-### `components`
+cd server
+npm start
 
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+# 빌드 및 동시 실행
+npm run build
+npm run all_start
+```
