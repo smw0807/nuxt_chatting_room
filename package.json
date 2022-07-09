@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "backend": "nodemon ./api/index.js",
+    "backend": "nodemon ./server/index.js",
     "dev_all": "concurrently \"npm run backend\" \"npm run dev\"",
     "build": "nuxt build",
     "start": "nuxt start",
