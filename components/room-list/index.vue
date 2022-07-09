@@ -15,14 +15,14 @@
           <td>{{list.length - index}}</td>
           <td>
             <div v-if="item.password === '' || item.password === null">
-              {{item.title}} <v-icon small>mdi-lock</v-icon> 
+              {{item.title}}
             </div>
             <div v-else>
-              {{item.title}}
+              {{item.title}} <v-icon small>mdi-lock</v-icon> 
             </div>
           </td>
           <td>
-            <v-btn @click="join(item._id)" small class="info">들어가기</v-btn>
+            <join :roomInfo="item" />
           </td>
           <td>{{item.max}}</td>
           <td>{{item.owner}}</td>
@@ -37,7 +37,11 @@
 </template>
 
 <script>
+import join from './join-room-button';
 export default {
+  components: {
+    join
+  },
   data() {
     return {
       loading: false,
@@ -57,6 +61,9 @@ export default {
   computed: {
     list() {
       return this.$store.getters['room/list'];
+    },
+    user() {
+      return this.$store.getters['user/info'];
     }
   },
   created() {
@@ -73,9 +80,6 @@ export default {
       }
       this.loading = false;
     },
-    join(id) {
-      this.$router.push(`/chat/${id}`);
-    }
   }
 }
 </script>

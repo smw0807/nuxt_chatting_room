@@ -1,16 +1,19 @@
 <template>
   <div>
-    <!-- 채팅방 왼쪽 방 참여자 목록 -->
+    <!-- 접속중인 사용자 정보  -->
     <users /> 
+
+    <!-- 방 제목 및 방 나가기 버튼 -->
     <v-row>
       <v-col cols="9">
-        <span class="text-h4">{{info.title}}</span>
+        <span class="text-h4">{{roomTitle}}</span>
       </v-col>
       <v-col cols="3">
         <exit @soekct-exit="exit"/>
       </v-col>
     </v-row>
-    <!-- 채팅방 오른쪽 채팅 -->
+
+    <!-- 채팅 메시지 관련 -->
     <chatting :message="receiveMsg" @send-message="sendMsg"/>
   </div>
 </template>
@@ -26,17 +29,18 @@ export default {
     chatting,
     exit
   },
-  created() {
+  async created() {
     this.roomId = this.$route.params.chat;
+    await this.connectChat();
   },
   async mounted() {
-    await this.connectChat();
   },
   destroyed() {
     this.socket = null;
   },
   data() {
     return {
+      roomTitle: '',
       socket: null,
       roomId: null,
       receiveMsg: [],
@@ -54,6 +58,7 @@ export default {
     async connectChat() {
       try {
         await this.$store.dispatch('room/connection', {id: this.roomId});
+        this.roomTitle = this.info.title;
       } catch (err) {
         console.error(err);
       }

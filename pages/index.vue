@@ -28,7 +28,7 @@
 
 <script>
 import createRoom from '@/components/create-room';
-import roomTable from '@/components/room-table';
+import roomTable from '@/components/room-list';
 export default {
   components: {
     createRoom,
