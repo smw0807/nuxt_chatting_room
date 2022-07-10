@@ -26,7 +26,7 @@
           </td>
           <td>{{item.max}}</td>
           <td>{{item.owner}}</td>
-          <td>{{item.createdDate}}</td>
+          <td>{{item.createdDate | ft_date}}</td>
         </tr>
       </template>
     </v-data-table>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import join from './join-room-button';
 export default {
   components: {
@@ -68,6 +69,11 @@ export default {
   },
   created() {
     this.getList();
+  },
+  filters: {
+    ft_date(v) {
+      return moment(v).format('YYYY-MM-DD HH:mm:ss');
+    }
   },
   methods: {
     async getList() {
