@@ -62,7 +62,7 @@
               append-icon="mdi-plus"
               prepend-icon="mdi-minus"
               min="2"
-              max="50"
+              max="20"
               @click:append="form.acceptableMaxCount++ || 0"
               @click:prepend="form.acceptableMaxCount-- || 0"
             ></v-slider>
