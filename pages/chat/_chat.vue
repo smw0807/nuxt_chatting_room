@@ -43,7 +43,8 @@ export default {
       roomTitle: '',
       socket: null,
       roomId: null,
-      receiveMsg: [],
+      receiveMsg: [], //받은 메세지
+      users: [], //방에 접속 중인 사용자들 표시용
     }
   },
   computed: {
@@ -52,6 +53,11 @@ export default {
     },
     info() {
       return this.$store.getters['room/info'];
+    }
+  },
+  watch: {
+    users(v) {
+      console.log('users : ' , v);
     }
   },
   methods: {
@@ -75,12 +81,17 @@ export default {
       this.socket.on('message', (data) => {
         this.receiveMsg.push(data);
       });
+      this.socket.on('users', (data) => {
+        this.users.push(data);
+      })
       this.join();
     },
     join() { //방 소켓 접속?
+      this.users.push(this.user);
       this.socket.emit('join', { user: this.user, roomId: this.roomId});
     },
     exit() { //방 소켓 접속 해제
+      //todo this.users 안에 데이터 삭제 해야함.
       this.socket.emit('exit', {user: this.user, roomId: this.roomId});
       this.$router.push('/');
     },

@@ -40,20 +40,20 @@ router.post('/create', verifyToken, async (req, res) => {
   }
   try {
     const params = req.body;
+    //토큰 검증
     const user = await verifyAccessToken(req.headers['access-token']);
+    //방 생성
     const rs = await Room.create({
       title: params.title,
       password: params.password || '',
       owner: user.nickName,
       max: params.acceptableMaxCount
     })
-    /**
-     * todo 만들고 소켓 처리 어떻게 해야할 지 고민해야함
-     */
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = rs;
-    
+
+    //방 리스트 불러오기
     const socket = req.app.get('io');
     socket.of('/room').emit('loadRoom');
   } catch (err) {
@@ -74,19 +74,15 @@ router.get('/join/:id', verifyToken, async (req, res) => {
     result: null
   }
   try {
-    // const _id = ;
+    const user = await verifyAccessToken(req.headers['refresh-token']);
     const room = await Room.findOne({_id: req.params.id});
     const socket = req.app.get('io');
     const { rooms } = socket.of('/chat').adapter;
-    console.log('roomId : ', req.params.id);
-    console.log('rooms : ', rooms);
     /**
      * todo 접속하려는 방 접속인원 꽉 찼는지 확인하는 로직 추가
      * todo 접속하려는 방이 비밀번호 방이면 비밀번호 맞는지 확인하는 로직 추가
      */
-    // socket.of('/chat').join(req.params.id);
-    // const user = await verifyAccessToken(req.headers['access-token']);
-    // socket.of('/chat').to(req.params.id).emit('systemMessage', `${user.nickName} 님이 접속하셨습니다`);
+    socket.of('/chat').to(req.params.id).emit('users', user);
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = room;
