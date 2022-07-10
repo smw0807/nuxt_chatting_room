@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 const multer = require('multer');
 const { cloneDeep } = require('lodash');
@@ -13,9 +14,17 @@ const {
 
 const { Users } = require('../models');
 
-const storage = multer.memoryStorage();
 const upload = multer({
-  storage: storage
+  storage: multer.diskStorage({
+    destination(req, file, done) { //저장될 경로
+      done(null, __dirname + '/../../static/userProfiles/');
+    },
+    filename(req, file, done) { //파일명
+      const ext = path.extname(file.originalname); //파일 확장자 추출
+      done(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 /**
@@ -35,11 +44,10 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
       password: encryptPassword(params.password),
       name: params.name,
       nickName: params.nickName,
-      image: file === undefined ? null : file.buffer.toString('base64'),
+      image: file === undefined ? '' : file.filename,
       desc: params.desc || ''
     }
     await Users.create(data);
-
     rt.ok = true;
     rt.msg = 'ok';
   } catch (err) {
