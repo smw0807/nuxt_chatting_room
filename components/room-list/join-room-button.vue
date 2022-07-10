@@ -20,14 +20,17 @@
       <v-btn @click="join" small class="info">들어가기</v-btn>
     </template>
     <dial ref="dialog"/>
+    <input-pass :roomPassword="roomInfo.password" ref="passChk" />
   </div>
 </template>
 
 <script>
 import dial from '@/components/cmn/dialog';
+import inputPass from './input-password';
 export default {
   components: {
-    dial
+    dial,
+    inputPass,
   },
   props: {
     roomInfo: {
@@ -46,7 +49,18 @@ export default {
     }
   },
   methods: {
-    join() {
+    async join() {
+      // 비밀번호가 있을 경우.
+      if (this.roomInfo.password !== '') {
+        const chk = await this.$refs.passChk.open();
+        if (!chk) {
+          await this.$refs.dialog.open({
+            title: '방 접속 실패',
+            text: '방 비밀번호와 일치하지 않습니다.'
+          });
+          return;
+        }
+      }
       this.$router.push(`/chat/${this.roomInfo._id}`);
     }
   }
