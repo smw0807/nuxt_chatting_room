@@ -55,7 +55,7 @@ router.post('/create', verifyToken, async (req, res) => {
     rt.result = rs;
     
     const socket = req.app.get('io');
-    socket.of('/room').emit('newRoom');
+    socket.of('/room').emit('loadRoom');
   } catch (err) {
     console.error('/room/create Error : ', err);
     rt.msg = err.message;
@@ -70,7 +70,7 @@ router.post('/create', verifyToken, async (req, res) => {
 router.get('/join/:id', verifyToken, async (req, res) => {
   const rt = {
     ok: false,
-    msg: 'ok',
+    msg: '',
     result: null
   }
   try {
@@ -90,6 +90,29 @@ router.get('/join/:id', verifyToken, async (req, res) => {
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = room;
+  } catch (err) {
+    rt.msg = err.message;
+    rt.result = err;
+  }
+  res.send(rt);
+})
+
+/**
+ * 방 삭제
+ */
+router.delete('/:id', async (req, res) => {
+  const rt = {
+    ok: false,
+    msg: '',
+    result: null,
+  }
+  try {
+    const rs = await Room.remove({_id: req.params.id});
+    const socket = req.app.get('io');
+    socket.of('/room').emit('loadRoom');
+    rt.ok = true;
+    rt.msg = 'ok';
+    rt.result = rs;
   } catch (err) {
     rt.msg = err.message;
     rt.result = err;

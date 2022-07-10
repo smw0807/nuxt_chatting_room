@@ -1,4 +1,5 @@
 const SocketIO = require('socket.io');
+const axios = require('axios');
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
@@ -43,15 +44,15 @@ module.exports = (server, app) => {
         message: msg,
       });
     })
-    socket.on('exit', (data) => {
+    socket.on('exit', async (data) => {
       const roomId = data.roomId;
       const user = data.user;
       socket.leave(roomId);
       const currentRoom = socket.adapter.rooms.get(roomId); //현재 방에 참여중인 소켓 정보?
       const userCount = currentRoom ? currentRoom.size : 0;
-      console.log('userCount? ', userCount);
       if (userCount === 0) {
-        //todo 방에 남은 사람이 없으면 방 삭제 로직 추가
+        const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
+        console.log('room Remove result : ', rs.data);
       } else {
         socket.to(roomId).emit('message', {
           type: 'system',

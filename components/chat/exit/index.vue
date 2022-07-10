@@ -28,7 +28,6 @@ export default {
       if (isExit) {
         //todo 소켓 로직 추가??
         this.$emit('soekct-exit');
-        this.$router.push('/');
       }
     }
   }

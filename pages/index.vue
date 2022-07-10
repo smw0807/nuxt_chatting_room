@@ -65,8 +65,8 @@ export default {
           emitTimeout: 1000
         })
         
-        this.socket.on('newRoom', async () => {
-          console.log('socket newRoom');
+        this.socket.on('loadRoom', async () => {
+          console.log('socket loadRoom');
           await this.$store.dispatch('room/list', {});
         })
       }

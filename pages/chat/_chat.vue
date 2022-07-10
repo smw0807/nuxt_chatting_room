@@ -80,6 +80,7 @@ export default {
     },
     exit() { //방 소켓 접속 해제
       this.socket.emit('exit', {user: this.user, roomId: this.roomId});
+      this.$router.push('/');
     },
     async sendMsg(v) {
       this.receiveMsg.push({ user: this.user, roomId: this.roomId, msg: v});
