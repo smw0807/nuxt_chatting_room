@@ -41,9 +41,9 @@ function makeToken(info) {
     access: null,
     refresh: null
   }
-  const { email, name, nickName, password } = info;
+  const { email, name, nickName, image } = info;
   result.access = jwt.sign({email, name, nickName}, access_key, {expiresIn: access_time});
-  result.refresh = jwt.sign({email, name, nickName}, refresh_key, {expiresIn: refresh_time});
+  result.refresh = jwt.sign({email, name, nickName, image}, refresh_key, {expiresIn: refresh_time});
   return result;
 }
 
