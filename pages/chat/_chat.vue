@@ -57,12 +57,14 @@ export default {
   methods: {
     async connectChat() {
       try {
+        //벙 정보 가져오기
         await this.$store.dispatch('room/connection', {id: this.roomId});
         this.roomTitle = this.info.title;
       } catch (err) {
         console.error(err);
       }
       if (!this.socket) {
+        //채팅 소켓 연결
         this.socket = this.$nuxtSocket({
           name: 'main',
           channel: '/chat',

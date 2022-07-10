@@ -26,7 +26,6 @@ export default {
         text: '현재 채팅방을 나가시겠습니까?'
       })
       if (isExit) {
-        //todo 소켓 로직 추가??
         this.$emit('soekct-exit');
       }
     }

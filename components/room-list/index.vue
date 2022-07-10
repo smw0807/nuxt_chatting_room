@@ -59,10 +59,10 @@ export default {
     }
   },
   computed: {
-    list() {
+    list() { //방 리스트 정보
       return this.$store.getters['room/list'];
     },
-    user() {
+    user() { //현재 로그인 한 사용자 정보
       return this.$store.getters['user/info'];
     }
   },
@@ -73,7 +73,6 @@ export default {
     async getList() {
       this.loading = true;
       try {
-        //todo 빈 파라메터는 나중에 검색 기능 추가할 때 사용하기
         await this.$store.dispatch('room/list', {}) 
       } catch (err) {
         console.error(err);

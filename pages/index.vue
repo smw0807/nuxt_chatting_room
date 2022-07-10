@@ -16,9 +16,6 @@
           <v-card-text>
             <room-table />
           </v-card-text>
-          <v-card-text>
-            <v-btn @click="test">API Test</v-btn>
-          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -49,27 +46,20 @@ export default {
     }
   },
   methods: {
-    async test() {
-      try {
-        const rs = await this.$axios.post('/api/test');
-      } catch (err) {
-        console.error('api test Error : ', err);
-      }
-    },
     connectRoom() {
       if (!this.socket) {
+        //채팅방 소켓 연결
         this.socket = this.$nuxtSocket({
           name: 'main',
           channel: '/room',
           persist: true,
           emitTimeout: 1000
         })
-        
-        this.socket.on('loadRoom', async () => {
-          console.log('socket loadRoom');
-          await this.$store.dispatch('room/list', {});
-        })
       }
+      //방 리스트 가져오기
+      this.socket.on('loadRoom', async () => {
+        await this.$store.dispatch('room/list', {});
+      })
     },
   }
 }
