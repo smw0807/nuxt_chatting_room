@@ -40,11 +40,11 @@ module.exports = (server, app) => {
     socket.on('sendMessage', (data) => {
       const roomId = data.roomId;
       const user = data.user;
-      const msg = data.msg;
+      const message = data.message;
       socket.to(roomId).emit('message', {
         type: 'user',
         user: user.nickName,
-        message: msg,
+        message: message,
       });
     })
     //방 나가기
