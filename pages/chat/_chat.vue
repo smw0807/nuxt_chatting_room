@@ -96,8 +96,8 @@ export default {
       this.$router.push('/');
     },
     async sendMsg(v) {
-      this.receiveMsg.push({ user: this.user, roomId: this.roomId, msg: v});
-      this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, msg: v});
+      this.receiveMsg.push({ user: this.user, roomId: this.roomId, message: v});
+      this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
     }
   }
 }
