@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const fs = require('fs');
 
 const multer = require('multer');
 const { cloneDeep } = require('lodash');
@@ -28,7 +29,7 @@ const upload = multer({
 });
 
 /**
- * 회원가입
+ * 회원가입 또는 수정
  */
 router.post('/sign-up', upload.single('image'), async (req, res) => {
   const rt = {
@@ -39,17 +40,58 @@ router.post('/sign-up', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
     const params = JSON.parse(req.body.info);
-    const data = {
-      email: params.email,
-      password: encryptPassword(params.password),
-      name: params.name,
-      nickName: params.nickName,
-      image: file === undefined ? '' : file.filename,
-      desc: params.desc || ''
+    const mode = params.mode;
+    if (mode === 'ins') {
+      const data = {
+        email: params.email,
+        password: encryptPassword(params.password),
+        name: params.name,
+        nickName: params.nickName,
+        image: file === undefined ? '' : file.filename,
+        desc: params.desc || ''
+      }
+      await Users.create(data);
+      rt.msg = 'ok';
+    } else if (mode === 'upd') {
+      const preData = await Users.findOne({email: params.email});
+
+      const updData = {};
+      // 패스워드는 입력받았을 경우에 수정.
+      if (params.password) updData.password = encryptPassword(params.password);
+      
+      // 이름, 닉네임은 필수 입력 사항이라 기존 데이터랑 다른지 체크
+      if (params.name !== preData.name) updData.name = params.name;
+      if (params.nickName !== preData.nickName) updData.nickName = params.nickName;
+      
+      // 프로필 이미지 새로 등록시 기존 사진 데이터 삭제
+      if (file) {
+        updData.image = file.filename;
+        if (preData.image !== '') {
+          try {
+            fs.unlinkSync(__dirname + '/../../static/userProfiles/' + preData.image);
+          } catch (err) {
+            console.log(`${preData.image} 파일 없음.`);
+          }
+        }
+      }
+
+      if (params.desc !== preData.desc) updData.desc = params.desc;
+      
+      if (Object.keys(updData).length === 0) {
+        throw { message : '수정할 정보가 없습니다.'};
+      }
+
+      await Users.update({email: params.email}, updData);
+
+      const user = await Users.findOne({email: params.email});
+      const rtUser = user.toObject();
+      delete rtUser.password;
+      delete rtUser.token;
+      rt.msg = 'upd';
+      rt.result = rtUser;
     }
-    await Users.create(data);
     rt.ok = true;
-    rt.msg = 'ok';
+    
   } catch (err) {
     console.error('sign-up Error : ', err);
     rt.msg = err.message;

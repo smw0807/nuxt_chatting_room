@@ -51,10 +51,9 @@ router.post('/refresh', async (req, res) => {
     const check = await verifyRefreshToken(reqRefresh);
     //사용자 정보 가져오기 및 refreshToken 일치 여부 확인
     const user = await Users.findOne({emial: check.email});
-    if (reqRefresh !== user.token) {
-      console.log('refreshToken 변조 혹은 만료');
+    
+    if (reqRefresh !== user.token) 
       throw { message: 'refreshToken 변조 혹은 만료'};
-    }
     
     const {access, refresh} = makeToken(user);
     // 사용자 정보에 refresh Token 추가

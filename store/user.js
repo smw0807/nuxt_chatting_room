@@ -49,10 +49,14 @@ export const actions = {
       }
     })
   },
-  signup({}, params) { //회원가입
+  signup({ commit }, params) { //회원가입 및 수정
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/user/sign-up', params);
+        //사용자 정보 수정일 경우 유저 정보 상태 업데이트
+        if (rs.data.ok && rs.data.msg === 'upd') {
+          commit('info', rs.data.result);
+        }
         resolve(rs);
       } catch (err) {
         reject(err);

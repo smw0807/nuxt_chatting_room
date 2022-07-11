@@ -55,8 +55,8 @@
           </v-form>
         </v-card-text>
         <v-card-actions>
-          <!-- todo 회원가입 컴포넌트 넣기 -->
-          <signUp />
+          <!-- 회원가입 컴포넌트 -->
+          <signUp mode="ins"/>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="submit">로그인</v-btn>
         </v-card-actions>
@@ -113,7 +113,6 @@ export default {
       }
     },
     async submit() {
-      console.log('submit');
       try {
         if (!this.$refs.form.validate()) return;
 

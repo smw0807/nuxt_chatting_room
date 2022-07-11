@@ -25,14 +25,8 @@
               {{ user.email }}
             </p>
             <v-divider class="my-3"></v-divider>
-            <v-btn
-              depressed
-              rounded
-              text
-              @click="editProfile"
-            >
-              사용자 정보 수정
-            </v-btn>
+            <!-- 사용자 정보 수정 -->
+            <signUp mode="upd" />
             <v-divider class="my-3"></v-divider>
             <v-btn
               depressed
@@ -50,10 +44,12 @@
 </template>
 
 <script>
+import signUp from './sign-up';
 import avatar from './avatar';
 export default {
   components: {
-    avatar
+    avatar,
+    signUp,
   },
   data() {
     return {
@@ -71,14 +67,6 @@ export default {
   methods: {
     editProfile() {
       console.log('사용자 수정');
-      const test = { //테스트 데이터
-        email: 'test@naver.com',
-        name: 'minwoo',
-        nickName: 'smw001',
-        gender: 'female',
-        image: null
-      }
-      this.$store.commit('user/info', test);
     },
     logout() {
       this.$store.dispatch('user/signout');

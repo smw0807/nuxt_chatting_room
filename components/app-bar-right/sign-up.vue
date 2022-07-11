@@ -6,7 +6,7 @@
       max-width="550px"
       >
       <template v-slot:activator="{on, attrs}">
-        <v-btn
+        <v-btn v-if="mode === 'ins'"
           color="primary"
           dark
           v-bind="attrs"
@@ -14,6 +14,16 @@
           outlined
           >
           회원가입
+        </v-btn>
+        <v-btn
+          v-else
+          depressed
+          rounded
+          text
+          v-bind="attrs"
+          v-on="on"
+          >
+          사용자 정보 수정
         </v-btn>
       </template>
       <v-card class="elevation-12">
@@ -37,6 +47,7 @@
             <v-text-field
               v-model="form.email"
               :rules="rules.email"
+              :disabled="mode === 'upd' ? true : false"
               label="이메일 *"
               prepend-icon="mdi-mail"
               type="text"
@@ -117,7 +128,8 @@
         <v-card-actions>
           <v-btn color="accent" @click="$refs.form.reset()">초기화</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="submit">가입하기</v-btn>
+          <v-btn v-if="mode === 'ins'" color="primary" @click="submit">가입하기</v-btn>
+          <v-btn v-else color="primary" @click="submit">수정하기</v-btn>
         </v-card-actions>
       </v-card>
       <dial ref="dialog"/>
@@ -128,13 +140,32 @@
 <script>
 import dial from '@/components/cmn/dialog';
 export default {
+  props: {
+    mode: {
+      type: String,
+      default: 'ins'
+    },
+  },
   components: {
     dial
+  },
+  watch: {
+    dialog(v) {
+      this.form.mode = this.mode;
+      if (v && this.mode === 'upd') {
+        const user = this.$store.getters['user/info'];
+        this.form.email = user.email;
+        this.form.name = user.name;
+        this.form.nickName = user.nickName;
+        this.form.desc = user.desc;
+      }
+    }
   },
   data() {
     return {
       dialog: false,
       form: { // 입력 폼 데이터 바인딩
+        mode: null,
         //이메일
         email: null,
         //비밀번호
@@ -191,6 +222,8 @@ export default {
           return true;
         },
         password: (v) => {
+          if (!v && this.mode === 'upd') return true;
+
           if (v.match(/[\s]/g)) {
             return '패스워드에 공백을 사용하실 수 없습니다.';
           }
@@ -200,6 +233,8 @@ export default {
           return true;
         },
         confirmPassword: (v) =>{
+          if (!v && this.mode === 'upd') return true;
+
           if (v !== this.form.password) {
             return '패스워드가 일치하지 않습니다.';
           }
@@ -224,8 +259,8 @@ export default {
         if (!this.$refs.form.validate()) return;
         const confirm = await this.$refs.dialog.open({
           mode: 'confirm',
-          title: '회원가입',
-          text: '입력한 정보로 회원가입을 진행하시겠습니까?'
+          title: this.mode === 'ins' ? '회원가입' : '사용자 정보 수정',
+          text: this.mode === 'ins' ? '입력한 정보로 회원가입을 진행하시겠습니까?' : '입력한 정보로 수정하시겠습니까?'
         });
         if (!confirm) return;
         const formData = new FormData();
@@ -237,24 +272,25 @@ export default {
           await this.$refs.dialog.open({
             mode: 'alert',
             type: 'error',
-            title: '회원가입 실패',
+            title: this.mode === 'ins' ? '회원가입 실패' : '사용자 정보 수정 실패',
             text: rs.data.msg
           })
         } else {
           await this.$refs.dialog.open({
             mode: 'alert',
             type: 'success',
-            title: '회원가입 완료',
-            text: '회원가입에 성공했습니다.\n로그인을 해주시기 바랍니다.'
+            title: this.mode === 'ins' ? '회원가입 완료' : '사용자 정보 수정 완료',
+            text: this.mode === 'ins' ? '회원가입에 성공했습니다.\n로그인을 해주시기 바랍니다.' : '수정 완료되었습니다.'
           })
           this.dialog = false;
         }
+        this.$refs.form.reset();
       } catch (err) {
         console.error('submit fail...', err);
         await this.$refs.dialog.open({
           mode: 'alert',
           type: 'error',
-          title: '회원가입 실패',
+          title: this.mode === 'ins' ? '회원가입 실패' : '사용자 정보 수정 실패',
           text: err
         })
       }
