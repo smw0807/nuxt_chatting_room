@@ -9,9 +9,10 @@ module.exports = (server, app) => {
     }
   });
   app.set('io', io); 
-  const room = io.of('/room'); 
-  const chat = io.of('/chat');
+  const room = io.of('/room'); //채팅방 네임스페이스
+  const chat = io.of('/chat'); //채팅 네임스페이스
 
+  //채팅방 소켓
   room.on('connection', (socket) => {
     console.log(`room 네임스페이스 접속`);
          
@@ -20,6 +21,7 @@ module.exports = (server, app) => {
     });
   });
 
+  //채팅 소켓
   chat.on('connection', (socket) => {
     console.log('chat 네임스페이스 접속');
     
@@ -34,6 +36,7 @@ module.exports = (server, app) => {
         message: `${user.nickName} 님이 입장하셨습니다.`
       });
     })
+    //메세지 보내기
     socket.on('sendMessage', (data) => {
       const roomId = data.roomId;
       const user = data.user;
@@ -44,6 +47,7 @@ module.exports = (server, app) => {
         message: msg,
       });
     })
+    //방 나가기
     socket.on('exit', async (data) => {
       const roomId = data.roomId;
       const user = data.user;
@@ -51,6 +55,7 @@ module.exports = (server, app) => {
       const currentRoom = socket.adapter.rooms.get(roomId); //현재 방에 참여중인 소켓 정보?
       const userCount = currentRoom ? currentRoom.size : 0;
       if (userCount === 0) {
+        //채팅방에 남아있는 사람이 없으면 방 삭제
         const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
         console.log('room Remove result : ', rs.data);
       } else {
@@ -61,7 +66,6 @@ module.exports = (server, app) => {
         });
       }
     })
-    // console.log(socket.adapter)
     socket.on('disconnect', async () => {
       console.log('chat 네임스페이스 해제');
     })
