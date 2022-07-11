@@ -4,7 +4,7 @@
       color="white"
       size="48"
       >
-      <img :src="'userProfiles/' + user.image" style="max-width:35px; max-height:35px;"/>
+      <img :src="'/userProfiles/' + user.image" style="max-width:35px; max-height:35px;"/>
     </v-avatar>
 
     <v-avatar v-else
