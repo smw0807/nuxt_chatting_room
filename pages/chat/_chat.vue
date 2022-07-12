@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 접속중인 사용자 정보  -->
-    <users /> 
+    <users :users="users" /> 
 
     <!-- 방 제목 및 방 나가기 버튼 -->
     <v-row>
@@ -60,11 +60,6 @@ export default {
       return this.$store.getters['room/info'];
     }
   },
-  watch: {
-    users(v) {
-      console.log('users : ' , v);
-    }
-  },
   methods: {
     async connectChat() {
       if (!this.socket) {
@@ -79,8 +74,9 @@ export default {
       this.socket.on('message', (data) => {
         this.receiveMsg.push(data);
       });
+      //접속하는 방에 접속자 정보 넣기
       this.socket.on('users', (data) => {
-        this.users.push(data);
+        this.connectedPerson(data);
       })
       
       try {
@@ -113,7 +109,7 @@ export default {
       }
     },
     join() { //방 소켓 접속?
-      this.users.push(this.user);
+      this.connectedPerson(this.user);
       this.socket.emit('join', { user: this.user, roomId: this.roomId});
     },
     exit() { //방 소켓 접속 해제
@@ -124,6 +120,10 @@ export default {
     async sendMsg(v) {
       this.receiveMsg.push({ user: this.user, roomId: this.roomId, message: v});
       this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
+    },
+    connectedPerson(v) { //방 접속자 넣기
+      const hasUser = this.users.find( x => x.nickName == v.nickName);
+      if (!hasUser) this.users.push(v);
     }
   }
 }
