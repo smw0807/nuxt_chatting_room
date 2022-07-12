@@ -66,8 +66,9 @@ module.exports = (server, app) => {
         });
       }
     })
-    socket.on('disconnect', async () => {
-      console.log('chat 네임스페이스 해제');
+    
+    socket.on('disconnect', async (data) => {
+      console.log('chat 네임스페이스 해제 , ', data);
     })
   })
 } 

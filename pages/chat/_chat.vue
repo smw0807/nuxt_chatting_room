@@ -15,6 +15,8 @@
 
     <!-- 채팅 메시지 관련 -->
     <chatting :message="receiveMsg" @send-message="sendMsg"/>
+
+    <dial ref="dialog" />
   </div>
 </template>
 
@@ -22,12 +24,14 @@
 import users from '@/components/chat/users';
 import chatting from '@/components/chat/chatting';
 import exit from '@/components/chat/exit';
+import dial from '@/components/cmn/dialog';
 export default {
   layout: 'chat',
   components: {
     users,
     chatting,
-    exit
+    exit,
+    dial
   },
   async created() {
     this.roomId = this.$route.params.chat;
@@ -36,6 +40,7 @@ export default {
   async mounted() {
   },
   destroyed() {
+    console.log('destroyed');
     this.socket = null;
   },
   data() {
@@ -62,13 +67,6 @@ export default {
   },
   methods: {
     async connectChat() {
-      try {
-        //벙 정보 가져오기
-        await this.$store.dispatch('room/connection', {id: this.roomId});
-        this.roomTitle = this.info.title;
-      } catch (err) {
-        console.error(err);
-      }
       if (!this.socket) {
         //채팅 소켓 연결
         this.socket = this.$nuxtSocket({
@@ -84,7 +82,35 @@ export default {
       this.socket.on('users', (data) => {
         this.users.push(data);
       })
-      this.join();
+      
+      try {
+        //벙 정보 가져오기
+        const rs = await this.$store.dispatch('room/connection', {id: this.roomId});
+        if (rs.data.ok) {
+          this.$store.commit('room/info', rs.data.result);
+          this.roomTitle = this.info.title;
+          this.join();
+        } else {
+          if (rs.data.msg === 'max') {
+            await this.$refs.dialog.open({
+              mode: 'alert',
+              type: 'warning',
+              title: '방 접속 불가',
+              text: rs.data.result
+            })
+          } else {
+            await this.$refs.dialog.open({
+              mode: 'alert',
+              type: 'error',
+              title: '방 접속 실패',
+              text: rs.data.msg
+            })
+          }
+          this.$router.push('/');
+        }
+      } catch (err) {
+        console.error(err);
+      }
     },
     join() { //방 소켓 접속?
       this.users.push(this.user);

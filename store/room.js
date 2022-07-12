@@ -59,10 +59,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const rs = await this.$axios.get('/api/room/join/' + params.id);
-        if (rs.data.ok) {
-          commit('info', rs.data.result);
-        }
-        resolve(true);
+        resolve(rs);
       } catch (err) {
         reject(err);
       }

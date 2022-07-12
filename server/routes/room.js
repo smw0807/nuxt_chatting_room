@@ -78,10 +78,18 @@ router.get('/join/:id', verifyToken, async (req, res) => {
     const room = await Room.findOne({_id: req.params.id});
     const socket = req.app.get('io');
     const { rooms } = socket.of('/chat').adapter;
-    /**
-     * todo 접속하려는 방 접속인원 꽉 찼는지 확인하는 로직 추가
-     * todo 접속하려는 방이 비밀번호 방이면 비밀번호 맞는지 확인하는 로직 추가
-     */
+
+    //방 인원 체크
+    if (rooms && rooms.get(req.params.id) ) {
+      if (room.max == rooms.get(req.params.id).size) {
+        return res.send({
+          ok: false,
+          msg: 'max',
+          result: '허용인원이 초과하였습니다',
+        })
+      }
+    }
+
     socket.of('/chat').to(req.params.id).emit('users', user);
     rt.ok = true;
     rt.msg = 'ok';
@@ -115,22 +123,5 @@ router.delete('/:id', async (req, res) => {
   }
   res.send(rt);
 })
-
-/**
- * 채팅 메세지 보내기
- */
-// router.post('/:id/chat', async (req, res) => {
-//   const rt = {
-//     ok: false,
-//     msg: '',
-//     result: null,
-//   }
-//   try {
-//   } catch (err) {
-//     rt.msg = err.message;
-//     rt.result = err;
-//   }
-//   res.send(rt);
-// })
 
 module.exports = router;
