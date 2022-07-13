@@ -118,7 +118,9 @@ export default {
       this.$router.push('/');
     },
     async sendMsg(v) {
-      this.receiveMsg.push({ user: this.user, roomId: this.roomId, message: v});
+      // 내가 입력한 메세지는 다이렉트로 푸시
+      this.receiveMsg.push({type: 'user', user: this.user, roomId: this.roomId, message: v});
+      // 같은 방 접속자들에게 메세지 보내기.
       this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
     },
     connectedPerson(v) { //방 접속자 넣기

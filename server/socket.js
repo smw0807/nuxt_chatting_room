@@ -43,7 +43,7 @@ module.exports = (server, app) => {
       const message = data.message;
       socket.to(roomId).emit('message', {
         type: 'user',
-        user: user.nickName,
+        user: user,
         message: message,
       });
     })

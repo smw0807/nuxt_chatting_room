@@ -9,33 +9,28 @@
           :max-height="resize_height - 280"
           >
           <template v-for="(data, idx) of message">
+            <!-- 시스템 메세지 -->
             <v-card-text align="center" v-if="data.type === 'system'" :key="idx">
               <v-alert
                 color="cyan"
                 border="left"
                 elevation="2"
                 outlined
+                dense
                 >
                 {{data.message}}
               </v-alert>
             </v-card-text>
-            <v-card-text align="left" v-else-if="data.user !== user.nickName" :key="idx">
-              {{data.message}}
-            </v-card-text>
-            <v-card-text align="left" v-else-if="data.user === user.nickName" :key="idx">
-              {{data.message}}
-            </v-card-text>
+
+            <!-- 사용자 메세지 -->
+            <message 
+              v-else-if="data.type === 'user'"
+              :type="data.user.nickName === user.nickName ? 'mine' : 'other'"
+              :nickName="data.user.nickName"
+              :image="data.user.image"
+              :message="data.message" 
+              :key="idx"/>
           </template>
-          
-          <!-- <v-card-text class="d-flex flex-row deep-purple " style="width: 200px;">
-            abc
-          </v-card-text>
-          <v-card-text class="d-flex flex-row-reverse mt-1 black--text light-blue lighten-5" style="width: 200px">
-            def
-          </v-card-text>
-          <v-card-text class="d-flex flex-row deep-purple " style="width: 200px;">
-            hij
-          </v-card-text> -->
         </v-card>
       </v-card-text>
       <v-card-text>
@@ -55,10 +50,14 @@
 
 <script>
 import { resize } from '@/mixins/resize';
+import message from './message';
 export default {
   mixins: [
     resize
   ],
+  components: {
+    message
+  },
   props: {
     message: {
       type: Array
