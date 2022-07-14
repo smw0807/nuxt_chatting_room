@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 접속중인 사용자 정보  -->
-    <users :users="users" /> 
+    <users /> 
 
     <!-- 방 제목 및 방 나가기 버튼 -->
     <v-row>
@@ -120,8 +120,10 @@ export default {
       this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
     },
     connectedPerson(v) { //방 접속자 넣기
-      const hasUser = this.users.find( x => x.nickName == v.nickName);
-      if (!hasUser) this.users.push(v);
+      const users = this.$store.getters['chat/users'].filter(() => true);
+      const hasUser = users.find( x => x.nickName == v.nickName);
+      if (!hasUser) users.push(v);
+      this.$store.commit('chat/users', users);
     }
   }
 }

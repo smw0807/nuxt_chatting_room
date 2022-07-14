@@ -28,22 +28,16 @@
 
 <script>
 export default {
-  props: {
-    users: {
-      type: Array,
-      default: () => []
-    }
-  },
-  watch: {
-    users(v) {
-      console.log('users : ' , v);
-    }
-  },
   data() {
     return {
       drawer: true
     }
   },
+  computed: {
+    users() {
+      return this.$store.getters['chat/users'];
+    }
+  }
 }
 </script>
 
