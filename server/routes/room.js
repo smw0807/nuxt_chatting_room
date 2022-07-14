@@ -74,7 +74,6 @@ router.get('/join/:id', verifyToken, async (req, res) => {
     result: null
   }
   try {
-    const user = await verifyAccessToken(req.headers['refresh-token']);
     const room = await Room.findOne({_id: req.params.id});
     const socket = req.app.get('io');
     const { rooms } = socket.of('/chat').adapter;
@@ -90,7 +89,6 @@ router.get('/join/:id', verifyToken, async (req, res) => {
       }
     }
 
-    socket.of('/chat').to(req.params.id).emit('users', user);
     rt.ok = true;
     rt.msg = 'ok';
     rt.result = room;

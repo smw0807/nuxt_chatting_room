@@ -25,18 +25,24 @@ module.exports = (server, app) => {
   chat.on('connection', (socket) => {
     console.log('chat 네임스페이스 접속');
     
-    //방 접속
+    //방 접속 메시지 및 접속자 정보 보내기
     socket.on('join', (data) => {
       const roomId = data.roomId;
       const user = data.user;
       socket.join(roomId); 
       socket.to(roomId).emit('message', {
-        type:'system',
-        user: null,
+        type:'system-in',
+        user: user,
         message: `${user.nickName} 님이 입장하셨습니다.`
       });
     })
-    //메세지 보내기
+    //접속자 목록 받아 넘기기
+    socket.on('nowUsers', (data) => {
+      const roomId = data.roomId;
+      const users = data.users;
+      socket.to(roomId).emit('users', users);
+    })
+    //사용자가 입력한 메세지 보내기
     socket.on('sendMessage', (data) => {
       const roomId = data.roomId;
       const user = data.user;
@@ -59,9 +65,10 @@ module.exports = (server, app) => {
         const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
         console.log('room Remove result : ', rs.data);
       } else {
+        //채팅방에 남아있는 사람이 있으면 퇴장 메세지 전달
         socket.to(roomId).emit('message', {
-          type: 'system',
-          user: null,
+          type: 'system-out',
+          user: user, //접속중 사용자 목록에서 제거하는데 사용
           message: `${user.nickName} 님이 퇴장하셨습니다.`,
         });
       }

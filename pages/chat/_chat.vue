@@ -39,13 +39,13 @@ export default {
   destroyed() {
     console.log('destroyed');
     this.socket = null;
+    this.$store.commit('chat/users', []);
   },
   data() {
     return {
       socket: null,
       roomId: null,
       receiveMsg: [], //받은 메세지
-      users: [], //방에 접속 중인 사용자들 표시용
     }
   },
   computed: {
@@ -68,11 +68,19 @@ export default {
         });
       }
       this.socket.on('message', (data) => {
+        //받은 메세지
         this.receiveMsg.push(data);
+        //방 접속한 경우
+        if (data.type === 'system-in') 
+          this.connectedPerson(data.user);
+        //방 나간경우
+        if (data.type === 'system-out') 
+          this.leavePerson(data.user);
       });
-      //접속하는 방에 접속자 정보 넣기
+
+      // 접속한 방에 이미 있던 유저 정보들 받아서 넣기
       this.socket.on('users', (data) => {
-        this.connectedPerson(data);
+        this.$store.commit('chat/users', data);
       })
       
       try {
@@ -81,7 +89,7 @@ export default {
         if (rs.data.ok) {
           this.$store.commit('room/info', rs.data.result);
           this.$store.commit('chat/title', rs.data.result.title || '');
-          this.join();
+          this.join();//방 사람들에게 입장 메세지 보냄
         } else {
           if (rs.data.msg === 'max') {
             await this.$refs.dialog.open({
@@ -109,22 +117,34 @@ export default {
       this.socket.emit('join', { user: this.user, roomId: this.roomId});
     },
     exit() { //방 소켓 접속 해제
-      //todo this.users 안에 데이터 삭제 해야함.
       this.socket.emit('exit', {user: this.user, roomId: this.roomId});
       this.$router.push('/');
     },
     async sendMsg(v) {
-      // 내가 입력한 메세지는 다이렉트로 푸시
+      // 내가 입력한 메세지는 다이렉트로 푸시(내 화면에 표시하기 위해)
       this.receiveMsg.push({type: 'user', user: this.user, roomId: this.roomId, message: v});
       // 같은 방 접속자들에게 메세지 보내기.
       this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
     },
     connectedPerson(v) { //방 접속자 넣기
       const users = this.$store.getters['chat/users'].filter(() => true);
-      const hasUser = users.find( x => x.nickName == v.nickName);
+      const hasUser = users.find( x => x.nickName === v.nickName);
       if (!hasUser) users.push(v);
       this.$store.commit('chat/users', users);
-    }
+
+      /**
+       * 사람들 있는 방에 접속 시 
+       * 접속한 사람한테 현재 접속자 목록 넘기기
+       */
+      //todo 나갔다 들어오면 에러뜨는 문제가 있음
+      if (users.length > 1) { 
+          this.socket.emit('nowUsers', {users: users, roomId: this.roomId});
+      }
+    },
+    leavePerson(v) { //방 나간사람 뺴기
+      const users = this.$store.getters['chat/users'].filter(x => x.nickName !== v.nickName);
+      this.$store.commit('chat/users', users);
+    },
   }
 }
 </script>

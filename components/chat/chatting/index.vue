@@ -9,10 +9,19 @@
           :max-height="resize_height - 280"
           >
           <template v-for="(data, idx) of message">
+            <!-- 사용자 메세지 -->
+            <message 
+              v-if="data.type === 'user'"
+              :type="data.user.nickName === user.nickName ? 'mine' : 'other'"
+              :nickName="data.user.nickName"
+              :image="data.user.image"
+              :message="data.message" 
+              :key="idx"/>
+
             <!-- 시스템 메세지 -->
-            <v-card-text align="center" v-if="data.type === 'system'" :key="idx">
+            <v-card-text v-else align="center"  :key="idx">
               <v-alert
-                color="cyan"
+                :color="data.type === 'system-in' ? 'cyan' : 'amber'"
                 border="left"
                 elevation="2"
                 outlined
@@ -21,15 +30,6 @@
                 {{data.message}}
               </v-alert>
             </v-card-text>
-
-            <!-- 사용자 메세지 -->
-            <message 
-              v-else-if="data.type === 'user'"
-              :type="data.user.nickName === user.nickName ? 'mine' : 'other'"
-              :nickName="data.user.nickName"
-              :image="data.user.image"
-              :message="data.message" 
-              :key="idx"/>
           </template>
         </v-card>
       </v-card-text>
@@ -66,11 +66,6 @@ export default {
   data() {
     return {
       inputMsg: null,
-    }
-  },
-  watch: {
-    message(v) {
-      console.log('watch message : ', v);
     }
   },
   computed:{
