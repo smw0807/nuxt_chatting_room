@@ -8,15 +8,15 @@
       height="100%"
       >
 
-      <v-list
-        class="pl-14"
-        shaped
-      >
+      <v-list>
         <v-list-item
           v-for="(user, idx) in users"
           :key="idx"
           link
-        >
+          >
+          <v-list-item-icon>
+            <avatar :image="user.image" :size="35" />
+          </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{user.nickName}}</v-list-item-title>
           </v-list-item-content>
@@ -27,8 +27,11 @@
 </template>
 
 <script>
-import avatar from '@/components/'
+import avatar from '@/components/cmn/avatar'
 export default {
+  components: {
+    avatar,
+  },
   data() {
     return {
       drawer: true

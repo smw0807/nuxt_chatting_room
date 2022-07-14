@@ -5,7 +5,7 @@
       <v-col cols="12" :align="type ==='other' ? 'start' : 'end'">
         {{type}}
         {{nickName}}
-        <avatar :image="image"/>
+        <avatar :image="image" :size="35"/>
         {{message}}
 
       </v-col>
@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import avatar from './avatar';
+import avatar from '@/components/cmn/avatar';
+// import avatar from './avatar';
 export default {
   props: {
     type: {
