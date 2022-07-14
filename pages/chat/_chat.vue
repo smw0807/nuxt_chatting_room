@@ -5,10 +5,7 @@
 
     <!-- 방 제목 및 방 나가기 버튼 -->
     <v-row>
-      <v-col cols="9">
-        <span class="text-h4">{{roomTitle}}</span>
-      </v-col>
-      <v-col cols="3">
+      <v-col cols="12">
         <exit @soekct-exit="exit"/>
       </v-col>
     </v-row>
@@ -45,7 +42,6 @@ export default {
   },
   data() {
     return {
-      roomTitle: '',
       socket: null,
       roomId: null,
       receiveMsg: [], //받은 메세지
@@ -84,7 +80,7 @@ export default {
         const rs = await this.$store.dispatch('room/connection', {id: this.roomId});
         if (rs.data.ok) {
           this.$store.commit('room/info', rs.data.result);
-          this.roomTitle = this.info.title;
+          this.$store.commit('chat/title', rs.data.result.title || '');
           this.join();
         } else {
           if (rs.data.msg === 'max') {

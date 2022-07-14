@@ -26,12 +26,10 @@ export default {
   components: {
     profile,
   },
-  data() {
-    return {
-      title: 'Nuxt Chat'
-    }
-  },
   computed: {
+    title() {
+      return this.$store.getters['chat/title'];
+    },
     info() {
       return this.$store.getters['room/info'];
     }

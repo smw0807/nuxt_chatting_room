@@ -4,8 +4,9 @@
 
 export const state = () => {
   return {
-    title: null, //채팅방 제목
-    // title: '방 제목이야.', //채팅방 제목
+    title: '', //채팅방 제목
+    drawer: false, //접속중 사용자 네비게이션 드로우
+    users: [], //방에 접속중인 사람들
   }
 }
 
@@ -13,12 +14,24 @@ export const mutations = {
   title(state, payload) {
     state.title = payload;
   },
+  drawer(state, payload) {
+    state.drawer = payload;
+  },
+  users(state, payload) {
+    state.users = payload;
+  }, 
   
 }
 
 export const getters = {
   title(state) {
     return state.title;
+  },
+  drawer(state) {
+    return state.drawer;
+  },
+  users(state) {
+    return state.users;
   },
   
 }
