@@ -32,8 +32,8 @@ export default {
     },
     info() {
       return this.$store.getters['room/info'];
-    }
-  }
+    },
+  },
 }
 </script>
 

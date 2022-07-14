@@ -2,7 +2,9 @@
   <div>
      <v-navigation-drawer
       app
+      v-model="drawer"
       clipped
+      permanent
       height="100%"
       >
 
@@ -35,6 +37,11 @@ export default {
   watch: {
     users(v) {
       console.log('users : ' , v);
+    }
+  },
+  data() {
+    return {
+      drawer: true
     }
   },
 }
