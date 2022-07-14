@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import avatar from '@/components/'
 export default {
   data() {
     return {
