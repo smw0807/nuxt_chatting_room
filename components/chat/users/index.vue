@@ -9,6 +9,15 @@
       >
 
       <v-list>
+        <v-list-item>
+          <v-list-item-avatar>
+            <v-icon>mdi-account-group</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-title>
+            현재 접속자
+          </v-list-item-title>
+        </v-list-item>
+        <v-divider />
         <v-list-item
           v-for="(user, idx) in users"
           :key="idx"
