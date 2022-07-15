@@ -3,11 +3,58 @@
     <!-- {{type}} -->
     <v-row>
       <v-col cols="12" :align="type ==='other' ? 'start' : 'end'">
-        {{type}}
-        {{nickName}}
-        <avatar :image="image" :size="35"/>
-        {{message}}
+        
+        <v-list align="start" v-if="type === 'other'">
+          <v-list-item>
+            <v-list-item-avatar>
+              <avatar :image="image" :size="35"/>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{nickName}}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <v-card
+                  mix-width="20"
+                  max-width="300"
+                  align="start"
+                  outlined
+                  >
+                  <v-card-text>
+                    {{message}}
+                  </v-card-text>
+                </v-card>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
 
+        <v-list align="end" v-else-if="type === 'mine'">
+          <v-list-item>
+            
+            <v-list-item-content>
+              <v-list-item-title>
+                {{nickName}}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <v-card
+                  mix-width="20"
+                  max-width="300"
+                  align="end"
+                  outlined
+                  >
+                  <v-card-text>
+                    {{message}}
+                  </v-card-text>
+                </v-card>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-avatar>
+              <avatar :image="image" :size="35"/>
+            </v-list-item-avatar>
+          </v-list-item>
+        </v-list>
+        
       </v-col>
     </v-row>
   </div>
