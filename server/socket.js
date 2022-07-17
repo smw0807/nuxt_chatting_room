@@ -51,23 +51,6 @@ module.exports = (server, app) => {
       } else { //없을 경우
         roomUsers.set(roomId, [user]);
       }
-      //방 만들고 접속할 떈 왜 이게 안되는 걸까?????????
-      console.log(roomUsers.get(roomId));
-      socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
-    })
-
-    // 만들어진 방 접속 시 접속자 목록 넘기기
-    socket.on('nowUsers', (data) => {
-      console.log('nowUsers!!');
-      const roomId = data.roomId;
-      const user = data.user;
-
-      const rUsers = roomUsers.get(roomId);
-      const existsCheck = rUsers.find(x => x.nickName === user.nickName);
-      if (!existsCheck) {
-        rUsers.push(user);
-        roomUsers.set(roomId, rUsers);
-      }
       socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
     })
 
