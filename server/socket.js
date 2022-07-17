@@ -1,5 +1,7 @@
 const SocketIO = require('socket.io');
 const axios = require('axios');
+
+const roomUsers = new Map(); //생성된 방에 사용자 정보 담을 용도.
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
@@ -27,21 +29,48 @@ module.exports = (server, app) => {
     
     //방 접속 메시지 및 접속자 정보 보내기
     socket.on('join', (data) => {
+      console.log('join !!!!');
       const roomId = data.roomId;
       const user = data.user;
       socket.join(roomId); 
+
       socket.to(roomId).emit('message', {
         type:'system-in',
         user: user,
         message: `${user.nickName} 님이 입장하셨습니다.`
       });
+
+      //방 접속자 정보 최신화해서 접속중인 사용자들에게 전달
+      if (roomUsers.has(roomId)) { //방이 있을 경우
+        const rUsers = roomUsers.get(roomId);
+        const existsCheck = rUsers.find(x => x.nickName === user.nickName);
+        if (!existsCheck) {
+          rUsers.push(user);
+          roomUsers.set(roomId, rUsers);
+        }
+      } else { //없을 경우
+        roomUsers.set(roomId, [user]);
+      }
+      //방 만들고 접속할 떈 왜 이게 안되는 걸까?????????
+      console.log(roomUsers.get(roomId));
+      socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
     })
-    //접속자 목록 받아 넘기기
+
+    // 만들어진 방 접속 시 접속자 목록 넘기기
     socket.on('nowUsers', (data) => {
+      console.log('nowUsers!!');
       const roomId = data.roomId;
-      const users = data.users;
-      socket.to(roomId).emit('users', users);
+      const user = data.user;
+
+      const rUsers = roomUsers.get(roomId);
+      const existsCheck = rUsers.find(x => x.nickName === user.nickName);
+      if (!existsCheck) {
+        rUsers.push(user);
+        roomUsers.set(roomId, rUsers);
+      }
+      socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
     })
+
     //사용자가 입력한 메세지 보내기
     socket.on('sendMessage', (data) => {
       const roomId = data.roomId;
@@ -53,6 +82,7 @@ module.exports = (server, app) => {
         message: message,
       });
     })
+
     //방 나가기
     socket.on('exit', async (data) => {
       const roomId = data.roomId;
@@ -63,7 +93,9 @@ module.exports = (server, app) => {
       if (userCount === 0) {
         //채팅방에 남아있는 사람이 없으면 방 삭제
         const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
+        roomUsers.delete(roomId);
         console.log('room Remove result : ', rs.data);
+        console.log('delete ', roomUsers);
       } else {
         //채팅방에 남아있는 사람이 있으면 퇴장 메세지 전달
         socket.to(roomId).emit('message', {
@@ -71,6 +103,11 @@ module.exports = (server, app) => {
           user: user, //접속중 사용자 목록에서 제거하는데 사용
           message: `${user.nickName} 님이 퇴장하셨습니다.`,
         });
+        //나간 사용자를 제외한 최신 정보 전달
+        const rUsers = roomUsers.get(roomId);
+        const users = rUsers.filter(x => x.nickName !== user.nickName);
+        roomUsers.set(roomId, users);
+        socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
       }
     })
     

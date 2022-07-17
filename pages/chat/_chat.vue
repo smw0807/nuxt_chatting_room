@@ -3,7 +3,7 @@
     <!-- 접속중인 사용자 정보  -->
     <users /> 
 
-    <!-- 방 제목 및 방 나가기 버튼 -->
+    <!-- 방 나가기 버튼 -->
     <v-row>
       <v-col cols="12">
         <exit @soekct-exit="exit"/>
@@ -32,9 +32,9 @@ export default {
   },
   async created() {
     this.roomId = this.$route.params.chat;
-    await this.connectChat();
   },
   async mounted() {
+    await this.connectChat();
   },
   destroyed() {
     console.log('destroyed');
@@ -70,16 +70,10 @@ export default {
       this.socket.on('message', (data) => {
         //받은 메세지
         this.receiveMsg.push(data);
-        //방 접속한 경우
-        if (data.type === 'system-in') 
-          this.connectedPerson(data.user);
-        //방 나간경우
-        if (data.type === 'system-out') 
-          this.leavePerson(data.user);
       });
 
-      // 접속한 방에 이미 있던 유저 정보들 받아서 넣기
-      this.socket.on('users', (data) => {
+      // 이미 방에 접속 중인 사람들은 이걸로 최신 접속자 정보를 받음
+      this.socket.on('roomUsers', (data) => {
         this.$store.commit('chat/users', data);
       })
       
@@ -113,7 +107,7 @@ export default {
       }
     },
     join() { //방 소켓 접속?
-      this.connectedPerson(this.user);
+      console.log('join...');
       this.socket.emit('join', { user: this.user, roomId: this.roomId});
     },
     exit() { //방 소켓 접속 해제
@@ -125,25 +119,6 @@ export default {
       this.receiveMsg.push({type: 'user', user: this.user, roomId: this.roomId, message: v});
       // 같은 방 접속자들에게 메세지 보내기.
       this.socket.emit('sendMessage', { user: this.user, roomId: this.roomId, message: v});
-    },
-    connectedPerson(v) { //방 접속자 넣기
-      const users = this.$store.getters['chat/users'].filter(() => true);
-      const hasUser = users.find( x => x.nickName === v.nickName);
-      if (!hasUser) users.push(v);
-      this.$store.commit('chat/users', users);
-
-      /**
-       * 사람들 있는 방에 접속 시 
-       * 접속한 사람한테 현재 접속자 목록 넘기기
-       */
-      //todo 나갔다 들어오면 에러뜨는 문제가 있음
-      if (users.length > 1) { 
-          this.socket.emit('nowUsers', {users: users, roomId: this.roomId});
-      }
-    },
-    leavePerson(v) { //방 나간사람 뺴기
-      const users = this.$store.getters['chat/users'].filter(x => x.nickName !== v.nickName);
-      this.$store.commit('chat/users', users);
     },
   }
 }
