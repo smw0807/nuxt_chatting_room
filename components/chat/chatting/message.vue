@@ -1,11 +1,11 @@
 <template>
   <div>
-    <!-- {{type}} -->
     <v-row>
       <v-col cols="12" :align="type ==='other' ? 'start' : 'end'">
         
         <v-list align="start" v-if="type === 'other'">
           <v-list-item>
+
             <v-list-item-avatar>
               <avatar :image="image" :size="35"/>
             </v-list-item-avatar>
@@ -20,6 +20,7 @@
                 {{getTime()}}
               </v-list-item-subtitle>
             </v-list-item-content>
+
           </v-list-item>
         </v-list>
 
@@ -40,6 +41,7 @@
             <v-list-item-avatar>
               <avatar :image="image" :size="35"/>
             </v-list-item-avatar>
+
           </v-list-item>
         </v-list>
         
