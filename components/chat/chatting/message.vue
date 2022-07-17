@@ -10,20 +10,14 @@
               <avatar :image="image" :size="35"/>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>
+              <v-list-item-subtitle>
                 {{nickName}}
+              </v-list-item-subtitle>
+              <v-list-item-title>
+                {{message}}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <v-card
-                  mix-width="20"
-                  max-width="300"
-                  align="start"
-                  outlined
-                  >
-                  <v-card-text>
-                    {{message}}
-                  </v-card-text>
-                </v-card>
+                {{getTime()}}
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -33,20 +27,14 @@
           <v-list-item>
             
             <v-list-item-content>
-              <v-list-item-title>
+              <v-list-item-subtitle>
                 {{nickName}}
+              </v-list-item-subtitle>
+              <v-list-item-title>
+                {{message}}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <v-card
-                  mix-width="20"
-                  max-width="300"
-                  align="end"
-                  outlined
-                  >
-                  <v-card-text>
-                    {{message}}
-                  </v-card-text>
-                </v-card>
+                {{getTime()}}
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-avatar>
@@ -62,7 +50,7 @@
 
 <script>
 import avatar from '@/components/cmn/avatar';
-// import avatar from './avatar';
+import moment from 'moment';
 export default {
   props: {
     type: {
@@ -85,6 +73,11 @@ export default {
   components: {
     avatar
   },
+  methods: {
+    getTime() {
+      return moment().format('HH:mm');
+    }
+  }
 }
 </script>
 
