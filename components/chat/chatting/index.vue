@@ -3,10 +3,11 @@
     <v-card>
       <v-card-text>
         <v-card 
+          id="msgCard"
           class="overflow-y-auto"
           outlined
-          :height="resize_height - 280"
-          :max-height="resize_height - 280"
+          :height="resize_height - 250"
+          :max-height="resize_height - 250"
           >
           <template v-for="(data, idx) of message">
             <!-- 사용자 메세지 -->
@@ -16,7 +17,8 @@
               :nickName="data.user.nickName"
               :image="data.user.image"
               :message="data.message" 
-              :key="idx"/>
+              :key="idx"
+              />
 
             <!-- 시스템 메세지 -->
             <v-card-text v-else align="center"  :key="idx">
@@ -67,6 +69,10 @@ export default {
     return {
       inputMsg: null,
     }
+  },
+  updated() {
+    const msgCard = document.getElementById('msgCard');
+    msgCard.scrollTo({top: msgCard.scrollHeight, behavior: 'smooth' });
   },
   computed:{
     user() {

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="12" :align="type ==='other' ? 'start' : 'end'">
+    <v-row class="mx-0">
+      <v-col cols="12" class="py-0" :align="type ==='other' ? 'start' : 'end'">
         
         <v-list align="start" v-if="type === 'other'">
           <v-list-item>
