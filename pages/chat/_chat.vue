@@ -48,10 +48,10 @@ export default {
     }
   },
   computed: {
-    user() {
+    user() { //로그인 사용자 정보
       return this.$store.getters['user/info'];
     },
-    info() {
+    info() { //방 정보
       return this.$store.getters['room/info'];
     }
   },
@@ -83,9 +83,7 @@ export default {
           this.$store.commit('room/info', rs.data.result);
           this.$store.commit('chat/title', rs.data.result.title || '');
           this.join();//방 사람들에게 입장 메세지 보냄
-          if (this.$store.getters['chat/users'].length === 0) {
-            await this.chatUsers();
-          }
+          await this.chatUsers(); //방 접속자들 정보
         } else {
           if (rs.data.msg === 'max') {
             await this.$refs.dialog.open({
@@ -108,7 +106,7 @@ export default {
         console.error(err);
       }
     },
-    async chatUsers() {
+    async chatUsers() { //접속한 방 접속자들 정보 가져오기
       try {
         const rs = await this.$store.dispatch('chat/users', { user: this.user, roomId: this.roomId});
         if (!rs.data.ok) {

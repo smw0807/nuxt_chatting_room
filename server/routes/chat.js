@@ -28,13 +28,11 @@ router.post('/chatUsers', verifyToken, async (req, res) => {
     } else { //없을 경우
       chatUsers.set(roomId, [user]);
     }
-    console.log('test : ', chatUsers.get(roomId));
     const socket = req.app.get('io');
     socket.of('/chat').to(roomId).emit('chatUsers', chatUsers.get(roomId));
 
     rt.ok = true;
     rt.msg = 'ok';
-    rt.result = chatUsers.get(roomId);
   } catch (err) {
     rt.msg = err.message;
     rt.result = err;

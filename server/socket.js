@@ -28,7 +28,6 @@ module.exports = (server, app) => {
     
     //방 접속 메시지 및 접속자 정보 보내기
     socket.on('join', (data) => {
-      console.log('join !!!!');
       const roomId = data.roomId;
       const user = data.user;
       socket.join(roomId); 
