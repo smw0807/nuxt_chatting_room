@@ -37,7 +37,6 @@ export default {
     await this.connectChat();
   },
   destroyed() {
-    console.log('destroyed');
     this.socket = null;
     this.$store.commit('chat/users', []);
   },
@@ -73,7 +72,7 @@ export default {
       });
 
       // 이미 방에 접속 중인 사람들은 이걸로 최신 접속자 정보를 받음
-      this.socket.on('roomUsers', (data) => {
+      this.socket.on('chatUsers', (data) => {
         this.$store.commit('chat/users', data);
       })
       
@@ -84,6 +83,9 @@ export default {
           this.$store.commit('room/info', rs.data.result);
           this.$store.commit('chat/title', rs.data.result.title || '');
           this.join();//방 사람들에게 입장 메세지 보냄
+          if (this.$store.getters['chat/users'].length === 0) {
+            await this.chatUsers();
+          }
         } else {
           if (rs.data.msg === 'max') {
             await this.$refs.dialog.open({
@@ -106,8 +108,27 @@ export default {
         console.error(err);
       }
     },
+    async chatUsers() {
+      try {
+        const rs = await this.$store.dispatch('chat/users', { user: this.user, roomId: this.roomId});
+        if (!rs.data.ok) {
+          await this.$refs.dialog.open({
+            mode: 'alert',
+            type: 'error',
+            title: '현재 접속자 정보 가져오기 실패',
+            text: rs.data.msg
+          })
+        }
+      } catch (err) {
+        await this.$refs.dialog.open({
+          mode: 'alert',
+          type: 'error',
+          title: '현재 접속자 정보 가져오기 실패',
+          text: err.message
+        })
+      }
+    },
     join() { //방 소켓 접속?
-      console.log('join...');
       this.socket.emit('join', { user: this.user, roomId: this.roomId});
     },
     exit() { //방 소켓 접속 해제

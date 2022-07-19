@@ -30,4 +30,14 @@ export const getters = {
 }
 
 export const actions = {
+  users( { commit }, params) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const rs = await this.$axios.post('/api/chat/chatUsers', params);
+        resolve(rs);
+      } catch (err) {
+        reject(err);
+      }
+    })
+  },
 }

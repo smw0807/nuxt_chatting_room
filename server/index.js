@@ -16,10 +16,13 @@ app.post('/test', (req, res) => {
 app.use('/api/user', require('./routes/user'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/room', require('./routes/room'));
+app.use('/api/chat', require('./routes/chat'));
 
 const server = app.listen(3001, () => {
   console.log('API Start');
 })
+const chatUsers = new Map(); //생성된 채팅방에 사용자 정보 담을 용도.
+global.chatUsers = chatUsers;
 
 const WebSocket = require('./socket');
 WebSocket(server, app);

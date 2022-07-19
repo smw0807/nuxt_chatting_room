@@ -1,7 +1,6 @@
 const SocketIO = require('socket.io');
 const axios = require('axios');
 
-const roomUsers = new Map(); //생성된 방에 사용자 정보 담을 용도.
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
@@ -39,19 +38,6 @@ module.exports = (server, app) => {
         user: user,
         message: `${user.nickName} 님이 입장하셨습니다.`
       });
-
-      //방 접속자 정보 최신화해서 접속중인 사용자들에게 전달
-      if (roomUsers.has(roomId)) { //방이 있을 경우
-        const rUsers = roomUsers.get(roomId);
-        const existsCheck = rUsers.find(x => x.nickName === user.nickName);
-        if (!existsCheck) {
-          rUsers.push(user);
-          roomUsers.set(roomId, rUsers);
-        }
-      } else { //없을 경우
-        roomUsers.set(roomId, [user]);
-      }
-      socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
     })
 
     //사용자가 입력한 메세지 보내기
@@ -76,9 +62,9 @@ module.exports = (server, app) => {
       if (userCount === 0) {
         //채팅방에 남아있는 사람이 없으면 방 삭제
         const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
-        roomUsers.delete(roomId);
+        chatUsers.delete(roomId);
         console.log('room Remove result : ', rs.data);
-        console.log('delete ', roomUsers);
+        console.log('delete ', chatUsers);
       } else {
         //채팅방에 남아있는 사람이 있으면 퇴장 메세지 전달
         socket.to(roomId).emit('message', {
@@ -87,10 +73,10 @@ module.exports = (server, app) => {
           message: `${user.nickName} 님이 퇴장하셨습니다.`,
         });
         //나간 사용자를 제외한 최신 정보 전달
-        const rUsers = roomUsers.get(roomId);
+        const rUsers = chatUsers.get(roomId);
         const users = rUsers.filter(x => x.nickName !== user.nickName);
-        roomUsers.set(roomId, users);
-        socket.to(roomId).emit('roomUsers', roomUsers.get(roomId));
+        chatUsers.set(roomId, users);
+        socket.to(roomId).emit('chatUsers', chatUsers.get(roomId));
       }
     })
     
