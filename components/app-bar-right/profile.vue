@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-menu
-        bottom
-        min-width="200px"
-        rounded
-        offset-y
+      bottom
+      min-width="200px"
+      rounded
+      offset-y
       >
       <template v-slot:activator="{ on }">
         <v-btn
           icon
           x-large
           v-on="on"
-        >
+          >
           <avatar />
         </v-btn>
       </template>
@@ -25,7 +25,7 @@
               {{ user.email }}
             </p>
             <v-divider class="my-3"></v-divider>
-            <!-- 사용자 정보 수정 -->
+            <!-- 사용자 정보 수정 컴포넌트 -->
             <signUp mode="upd" />
             <v-divider class="my-3"></v-divider>
             <v-btn
@@ -51,23 +51,12 @@ export default {
     avatar,
     signUp,
   },
-  data() {
-    return {
-      avatarColor: {
-        male: 'blue lighter-4',
-        female: 'pink lighten-4'
-      }
-    }
-  },
   computed: {
     user() {
       return this.$store.getters['user/info'];
     }
   },
   methods: {
-    editProfile() {
-      console.log('사용자 수정');
-    },
     logout() {
       this.$store.dispatch('user/signout');
     }

@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-avatar v-if="image !== ''"
       color="white"
       size="35"
@@ -15,6 +16,7 @@
         mdi-account-circle
       </v-icon>
     </v-avatar>
+    
   </div>
 </template>
 

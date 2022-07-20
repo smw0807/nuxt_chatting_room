@@ -213,7 +213,7 @@ export default {
     }
   },
   methods: {
-    fnRules() {
+    fnRules() { //유효성 검증 룰
       return {
         email: (v) => {
           if (!v.match(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g)) {

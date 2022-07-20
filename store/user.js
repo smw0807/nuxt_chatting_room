@@ -9,14 +9,7 @@ import { strTimeToSeconds } from '~/utils/converts'
 
 export const state = () => {
   return {
-    info: null,
-    // info: {
-    //   email: 'test@naver.com',
-    //   name: 'minwoo',
-    //   nickName: 'smw001',
-    //   // image: null
-    //   image:'v.png'
-    // },
+    info: null, //사용자 정보
   }
 }
 

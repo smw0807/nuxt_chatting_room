@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <v-avatar v-if="user.image !== ''"
       color="white"
       size="48"
