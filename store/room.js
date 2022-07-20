@@ -28,7 +28,7 @@ export const getters = {
 }
 
 export const actions = {
-  list({ commit }, params) {
+  list({ commit }, params) { //채팅방 리스트 불러오기
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/room/list', params);
@@ -45,7 +45,7 @@ export const actions = {
       }
     })
   },
-  create({ commit }, params) {
+  create({ commit }, params) { //채팅방 만들기
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/room/create', params);
@@ -55,7 +55,7 @@ export const actions = {
       }
     })
   },
-  connection( {commit }, params) {
+  connection( {commit }, params) { //채팅방 접속
     return new Promise(async (resolve, reject) => {
       try {
         const rs = await this.$axios.get('/api/room/join/' + params.id);

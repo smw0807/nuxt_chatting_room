@@ -30,7 +30,7 @@ export const getters = {
 }
 
 export const actions = {
-  users( { commit }, params) {
+  users( { commit }, params) { //접속한 채팅방 접속자들 정보
     return new Promise(async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/chat/chatUsers', params);

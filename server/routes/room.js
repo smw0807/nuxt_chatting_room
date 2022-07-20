@@ -5,11 +5,6 @@ const { verifyToken } = require('../middleware/auth');
 const { verifyAccessToken } = require('../utils/auth');
 const { Room } = require('../models');
 
-router.post('/test', async (req, res) => {
-  console.log('test');
-  res.send('ok');
-})
-
 router.post('/list', async (req, res) => {
   const rt = {
     ok: false,
