@@ -14,8 +14,6 @@ const { Users } = require('../models');
 
 /**
  * accessToken 검증
- * 이상 없으면 전달받은 refreshToken 검증
- * 이상 없으면 사용자 정보에 있는 token 데이터와 일치하는지 확인
  */
 router.post('/verify', async (req, res) => {
   const rt = {
@@ -24,9 +22,15 @@ router.post('/verify', async (req, res) => {
     result: null
   }
   try {
-    await verifyAccessToken(req.headers['access-token']);
+    const token = await verifyAccessToken(req.headers['access-token']);
+    const user = await Users.findOne({email: token.email});
+
+    const rtUser = user.toObject();
+    delete rtUser.password;
+
     rt.ok = true;
     rt.msg = 'ok';
+    rt.result = rtUser;
   } catch (err) {
     console.error('/auth/verify Error : ', err);
     rt.msg = err.message;
@@ -50,8 +54,9 @@ router.post('/refresh', async (req, res) => {
     //refreshToken 검증
     const check = await verifyRefreshToken(reqRefresh);
     //사용자 정보 가져오기 및 refreshToken 일치 여부 확인
-    const user = await Users.findOne({emial: check.email});
+    const user = await Users.findOne({email: check.email});
     
+    //todo 과연 이게 의미가 있는 걸까?
     if (reqRefresh !== user.token) 
       throw { message: 'refreshToken 변조 혹은 만료'};
     

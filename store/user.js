@@ -65,7 +65,9 @@ export const actions = {
     return new Promise( async (resolve, reject) => {
       try {
         const rs = await this.$axios.post('/api/auth/verify');
-        if (!rs.data.ok) {
+        if (rs.data.ok) {
+          commit('info', rs.data.result);
+        } else {
           commit('info', null);
           this.$cookiz.remove('accessToken');
           this.$cookiz.remove('refreshToken');
@@ -90,23 +92,6 @@ export const actions = {
           commit('info', null);
           resolve(false);
         }
-      } catch (err) {
-        reject(err);
-      }
-    })
-  },
-  getInfo({ commit }) { //토큰으로 사용자 정보 가져오기 //userInfo가 null일 때만 사용?
-    return new Promise( async (resolve, reject) => {
-      try {
-        const rs = await this.$axios.post('/api/user/getUser');
-        if (rs.data.ok) {
-          commit('info', rs.data.result);
-        } else {
-          commit('info', null);
-          this.$cookiz.remove('accessToken');
-          this.$cookiz.remove('refreshToken');
-        }
-        resolve(true);
       } catch (err) {
         reject(err);
       }

@@ -6,6 +6,10 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   ssr: false,
+  server: {
+    host: process.env.host,
+    port: process.env.port,
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - chatting-room',
