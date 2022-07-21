@@ -15,6 +15,10 @@ nuxt_chatting_room 에서 `npm i` 그리고 server 디렉터리에서도 `npm i`
 nuxt_chatting_room, server 디렉터리에 각각 .env 파일 생성
 ### env 옵션
 ```
+### web ###
+host=
+port=
+
 ### MongoDB ###
 mongo_url=
 mongo_db=
