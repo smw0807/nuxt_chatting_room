@@ -57,5 +57,5 @@ npm start
 
 # 빌드 및 동시 실행
 npm run build
-npm run all_start
+npm run start_all
 ```
