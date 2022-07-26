@@ -18,7 +18,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/room', require('./routes/room'));
 app.use('/api/chat', require('./routes/chat'));
 
-const server = app.listen(3001, () => {
+const server = app.listen(process.env.server_port, process.env.server_host, () => {
   console.log('API Start');
 })
 const chatUsers = new Map(); //생성된 채팅방에 사용자 정보 담을 용도.

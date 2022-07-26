@@ -1,6 +1,11 @@
 const SocketIO = require('socket.io');
 const axios = require('axios');
 
+function serverURL() {
+  const { server_protocol, server_host, server_port } = process.env;
+  return `${server_protocol}://${server_host}:${server_port}`
+}
+
 module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
@@ -60,7 +65,7 @@ module.exports = (server, app) => {
       const userCount = currentRoom ? currentRoom.size : 0;
       if (userCount === 0) {
         //채팅방에 남아있는 사람이 없으면 방 삭제
-        const rs = await axios.delete(`${process.env.api_host}/api/room/${roomId}`);
+        const rs = await axios.delete(`${serverURL()}/api/room/${roomId}`);
         chatUsers.delete(roomId);
         console.log('room Remove result : ', rs.data);
         console.log('delete ', chatUsers);

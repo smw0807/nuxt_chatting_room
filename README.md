@@ -18,20 +18,32 @@ nuxt_chatting_room, server 디렉터리에 각각 .env 파일 생성
 ### env 옵션
 ```
 ### web ###
-host=
-port=
+web_host=
+web_port=
+
+### server ###
+server_protocol=
+server_host=
+server_port=
 
 ### MongoDB ###
+#몽고디비 URL
 mongo_url=
 mongo_db=
 
 ### token ###
+#accessToken 유효시간
 access_time=
+#accessToken 키값
 access_key=
+
+#refreshToken 유효시간
 refresh_time=
+#refreshToken 키값
 refresh_key=
 
 ### proxy ###
+#server url 예:) http://localhost:3001 또는 http://ipaddress:3001
 api_host=
 ```
 양 쪽에 필요한 이유는 `npm run dev_all` 때문에 양쪽에 필요함.
