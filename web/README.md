@@ -38,7 +38,7 @@ refresh_key=1q2w3e4r@@refreshtoken
 api_host=http://localhost:port or http://0.0.0.0:port
 ```
 
-## 3. 싧행
+## 3. 실행
 ```
 # 개발모드 실행
 npm run dev
