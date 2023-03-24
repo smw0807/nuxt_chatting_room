@@ -19,3 +19,10 @@ vue2 기반 nuxt와 socket.io nuxt-socket-io를 이용한 채팅방
 
 > 노드 버전은 16버전 권장
 > 개발당시 16버전에서 개발했었고, 18버전에서는 정상작동 안되는게 확인됨.
+
+# 디렉토리 설명
+- web   
+NuxtJS로 만들어진 웹이 들어있고 디렉토리에 들어가서 `npm install` 후 web 디렉터리 안에 있는 README.md 파일 참고   
+- server   
+node의 express로 socket.io를 이용해 소켓서버를 구동해준다.   
+디렉토리에 들어가서 `npm install` 후 server 디렉터리 안에 있는 README.md 파일 참고
