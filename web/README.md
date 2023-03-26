@@ -18,9 +18,6 @@ web_port=
 access_time=
 #accessToken 키값
 access_key=
-## 예시
-#access_time=1h
-#access_key=1q2w3e4r!
 
 #refreshToken 유효시간
 refresh_time=
@@ -29,7 +26,7 @@ refresh_key=
 
 ### proxy ###
 api_host=
-```
+```   
 예)
 ```
 web_host=0.0.0.0
@@ -41,7 +38,7 @@ refresh_key=1q2w3e4r@@refreshtoken
 api_host=http://localhost:port or http://0.0.0.0:port
 ```
 
-## 3. 싧행
+## 3. 실행
 ```
 # 개발모드 실행
 npm run dev
