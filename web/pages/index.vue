@@ -6,7 +6,20 @@
           <v-card-title>
             채팅방 목록
             <v-spacer />
-            <createRoom v-show="userInfo" />
+            <createRoom
+              v-show="cUuserInfo"
+              :open="isCreateRoomOpen"
+              @inputData="createRoom"
+              @close="createRoomClose"
+            />
+            <v-btn
+              color="primary"
+              dark
+              outlined
+              @click="isCreateRoomOpen = true"
+            >
+              방 만들기
+            </v-btn>
           </v-card-title>
           <v-divider />
           <v-card-text>
@@ -25,8 +38,6 @@ import roomTable from "@/components/room-list";
  * todo
  * 1. 방 리스트 props로 넘기기
  * 1-1. 방 리스트 컴포넌트에서 store 요청 로직 pages 쪽으로 빼기
- * 2. 방생성시  입력값 emit으로 받기
- * 2-1. 방생성시 store 요청 로직 pages 쪽으로 빼기
  */
 export default {
   components: {
@@ -36,6 +47,7 @@ export default {
   name: "IndexPage",
   data() {
     return {
+      isCreateRoomOpen: false,
       socket: null,
     };
   },
@@ -43,7 +55,7 @@ export default {
     this.connectRoom();
   },
   computed: {
-    userInfo() {
+    cUuserInfo() {
       return this.$store.getters["user/info"];
     },
   },
@@ -62,6 +74,23 @@ export default {
       this.socket.on("loadRoom", async () => {
         await this.$store.dispatch("room/list", {});
       });
+    },
+    async createRoom(v) {
+      const rs = await this.$store.dispatch("room/create", v);
+      if (rs.data.ok) {
+        this.isCreateRoomOpen = false;
+        this.$router.push("/chat/" + rs.data.result._id);
+      } else {
+        await this.$refs.dialog.open({
+          mode: "alert",
+          type: "error",
+          title: "방 생성 실패",
+          text: err.message,
+        });
+      }
+    },
+    createRoomClose(v) {
+      this.isCreateRoomOpen = v;
     },
   },
 };
