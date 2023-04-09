@@ -2,14 +2,10 @@
   <v-layout column>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="12">
-        <v-card 
-          class="mx-auto px-3" 
-          outlined 
-          max-width="1500"
-          >
+        <v-card class="mx-auto px-3" outlined max-width="1500">
           <v-card-title>
             채팅방 목록
-            <v-spacer/>
+            <v-spacer />
             <createRoom v-show="userInfo" />
           </v-card-title>
           <v-divider />
@@ -20,47 +16,53 @@
       </v-col>
     </v-row>
   </v-layout>
-  
 </template>
 
 <script>
-import createRoom from '@/components/create-room';
-import roomTable from '@/components/room-list';
+import createRoom from "@/components/create-room";
+import roomTable from "@/components/room-list";
+/**
+ * todo
+ * 1. 방 리스트 props로 넘기기
+ * 1-1. 방 리스트 컴포넌트에서 store 요청 로직 pages 쪽으로 빼기
+ * 2. 방생성시  입력값 emit으로 받기
+ * 2-1. 방생성시 store 요청 로직 pages 쪽으로 빼기
+ */
 export default {
   components: {
     createRoom,
     roomTable,
   },
-  name: 'IndexPage',
+  name: "IndexPage",
   data() {
     return {
       socket: null,
-    }
+    };
   },
   mounted() {
     this.connectRoom();
   },
   computed: {
     userInfo() {
-      return this.$store.getters['user/info'];
-    }
+      return this.$store.getters["user/info"];
+    },
   },
   methods: {
     connectRoom() {
       if (!this.socket) {
         //채팅방 소켓 연결
         this.socket = this.$nuxtSocket({
-          name: 'main',
-          channel: '/room',
+          name: "main",
+          channel: "/room",
           persist: true,
-          emitTimeout: 1000
-        })
+          emitTimeout: 1000,
+        });
       }
       //방 리스트 가져오기
-      this.socket.on('loadRoom', async () => {
-        await this.$store.dispatch('room/list', {});
-      })
+      this.socket.on("loadRoom", async () => {
+        await this.$store.dispatch("room/list", {});
+      });
     },
-  }
-}
+  },
+};
 </script>
